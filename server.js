@@ -26,3 +26,5 @@ const authRouter = require('./src/auth/authAPI')
 app.use(authRouter)
 
 app.listen(PORT, () => console.log(`Running on port: ${PORT}`))
+
+console.log('edit')
