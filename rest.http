@@ -1,0 +1,32 @@
+### LOGIN
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+    "phoneNum": "0123456789",
+    # "username": "admin",
+    # "email": "admin@gmail.com",
+    "password": "admin"
+}
+
+### REGISTER
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "password": "admin",
+    "adress": "admin adress",
+    "phoneNum": "0123456789",
+    "role": "admin",
+    "checkVerify": "verify needed"
+}
+
+### LOGOUT
+POST http://localhost:8080/user/logout
+Content-Type: application/json
+
+{
+    "sessionId": 30
+}
