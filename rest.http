@@ -1,4 +1,4 @@
-### LOGIN
+ ### LOGIN
 POST http://localhost:8080/user/login
 Content-Type: application/json
 
@@ -28,5 +28,5 @@ POST http://localhost:8080/user/logout
 Content-Type: application/json
 
 {
-    "sessionId": 30
+    "id": 8
 }

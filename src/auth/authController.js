@@ -1,12 +1,8 @@
-const db = require('../../config/db')
-const midLogin = require('./authMiddleware')
-const jwt = require('jsonwebtoken')
-
 // Login
 const Login = async (req, res) => {
     // const { username, email, phoneNum, password } = req.body
     // res.send(`You are logged in, Welcome ${user.username}`)
-    res.send(user)
+    res.send('OKAY')
 }
 
 // Register
