@@ -3,8 +3,8 @@ POST http://localhost:8080/user/login
 Content-Type: application/json
 
 {
-    "phoneNum": "0123456789",
-    # "username": "admin",
+    "username": "admin2",
+    # "phoneNum": "0123456789",
     # "email": "admin@gmail.com",
     "password": "admin"
 }
@@ -14,11 +14,11 @@ POST http://localhost:8080/user/register
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "email": "admin@gmail.com",
+    "username": "admin3",
+    "email": "admin3@gmail.com",
     "password": "admin",
     "adress": "admin adress",
-    "phoneNum": "0123456789",
+    "phoneNum": "0123456783",
     "role": "admin",
     "checkVerify": "verify needed"
 }
@@ -28,5 +28,22 @@ POST http://localhost:8080/user/logout
 Content-Type: application/json
 
 {
-    "id": 8
+    "id": 9
+}
+
+### FORGOT PASSWORD
+POST http://localhost:8080/user/forgot
+Content-Type: application/json
+
+{
+    "email": "admin3@gmail.com"
+}
+
+
+### RESET PASSWORD
+POST http://localhost:8080/user/forgot?resetpassword=35
+Content-Type: application/json
+
+{
+    "password": "123456"
 }
