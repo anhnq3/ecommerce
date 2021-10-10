@@ -396,10 +396,8 @@ const forgotpassword = async (req, res, next) => {
 }
 
 const resetpassword = async (req, res, next) => {
-
+    const { password } = req.body
     if (req.query.resetpassword) {
-        const { password } = req.body
-
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
@@ -418,11 +416,102 @@ const resetpassword = async (req, res, next) => {
     else return res.json('error')
 }
 
+const update = async(req, res, next) => {
+    // Check data
+    const { error } = authValidation.updateSchema(req.body)
+    if (error) return console.log(error)
+
+    const { userId , name, email, adress, phoneNum, password} = req.body
+
+    // Update name
+    if(userId && name){
+        const updateName = await users.update(
+            {
+                name: name
+            },
+            {
+                where: {
+                    id: userId
+                }
+            }
+        ).catch((err) => console.log(err))
+        console.log('Name updated');
+        next()
+    }
+
+    // Update email
+    if(userId && email){
+        const updateEmail = await users.update(
+            {
+                email: email
+            },
+            {
+                where: {
+                    id: userId
+                }
+            }
+        ).catch((err) => console.log(err))
+        console.log('Email updated');
+        next()
+    }
+    
+    // Update user address
+    if(userId && adress){
+        const updateAdress = await users.update(
+            {
+                adress: adress
+            },
+            {
+                where: {
+                    id: userId
+                }
+            }
+        ).catch((err) => console.log(err))
+        console.log('Adress updated');
+        next()
+    }
+
+    // Update user phoneNum
+    if(userId && phoneNum){
+        const updatePhonenum = await users.update(
+            {
+                phoneNum: phoneNum
+            },
+            {
+                where: {
+                    id: userId
+                }
+            }
+        ).catch((err) => console.log(err))
+        console.log('Phone number updated');
+        next()
+    }
+
+    // Update user password
+    if(userId && password){
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        await users.update(
+            {
+                password: hashedPassword
+            },
+            {
+                where: {
+                    id: userId
+                }
+            }).catch((err) => console.log(err))
+        console.log('Password updated');
+        next()
+    }
+}
+
 module.exports = {
     login,
     register,
     logout,
     verify,
     forgotpassword,
-    resetpassword
+    resetpassword,
+    update
 }

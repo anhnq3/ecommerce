@@ -26,12 +26,12 @@ const ResetPassword = async(req, res) => {
 
 //Update
 const Update = async (req, res) => {
-    res.send('This is a update')
+    res.send('Your accoount has been updated')
 }
 
 // Logout
 const Logout = async (req, res) => {
-    res.send('Logout')
+    res.send('Loged out')
 }
 
 

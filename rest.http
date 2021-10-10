@@ -3,10 +3,10 @@ POST http://localhost:8080/user/login
 Content-Type: application/json
 
 {
-    "username": "admin2",
+    "username": "admin",
     # "phoneNum": "0123456789",
     # "email": "admin@gmail.com",
-    "password": "admin"
+    "password": "123456"
 }
 
 ### REGISTER
@@ -14,11 +14,12 @@ POST http://localhost:8080/user/register
 Content-Type: application/json
 
 {
-    "username": "admin3",
-    "email": "admin3@gmail.com",
+    "username": "admin",
+    "email": "admin@gmail.com",
     "password": "admin",
+    "name": "admin",
     "adress": "admin adress",
-    "phoneNum": "0123456783",
+    "phoneNum": "0123456789",
     "role": "admin",
     "checkVerify": "verify needed"
 }
@@ -28,7 +29,7 @@ POST http://localhost:8080/user/logout
 Content-Type: application/json
 
 {
-    "id": 9
+    "id": 6
 }
 
 ### FORGOT PASSWORD
@@ -36,14 +37,61 @@ POST http://localhost:8080/user/forgot
 Content-Type: application/json
 
 {
-    "email": "admin3@gmail.com"
+    "email": "admin@gmail.com"
 }
 
 
 ### RESET PASSWORD
-POST http://localhost:8080/user/forgot?resetpassword=35
+POST http://localhost:8080/user/resetpassword?resetpassword=1
 Content-Type: application/json
 
 {
+    "password": "admin"
+}
+
+### UPDATE USER
+
+### UPDATE NAME
+http://localhost:8080/user/update
+Content-Type: application/json
+
+{
+    "userId": "1",
+    "name": "admin Nguyen"
+}
+
+### UPDATE ADDRESS
+http://localhost:8080/user/update
+Content-Type: application/json
+
+{
+    "userId": "1",
+    "adress": "115 Ton Duc Thang"
+}
+
+### UPDATE EMAIL
+http://localhost:8080/user/update
+Content-Type: application/json
+
+{
+    "userId": "1",
+    "email": "admin@gmai.com"
+}
+
+### UPDATE PHONE NUMBER
+http://localhost:8080/user/update
+Content-Type: application/json
+
+{
+    "userId": "1",
+    "phoneNum": "0123456789"
+}
+
+### UPDATE PASSWORD
+http://localhost:8080/user/update
+Content-Type: application/json
+
+{
+    "userId": "1",
     "password": "123456"
 }

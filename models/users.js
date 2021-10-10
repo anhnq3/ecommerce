@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
+        name:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            },
+            defaultValue: 'user'
+        },
         username: {
             type: DataTypes.STRING,
             allowNull: false,

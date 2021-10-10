@@ -17,6 +17,10 @@ db.sequelize.sync().then((req) => {
     app.listen(PORT, () => console.log(`Running on port: ${PORT}`))
 })
 
+// Auth Router
 const authRouter = require('./src/auth/authAPI')
 app.use(authRouter)
 
+// Admin Router
+const adminRouter = require('./src/admin/adminAPI')
+app.use(adminRouter)

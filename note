@@ -1,3 +1,7 @@
 git add .
 git commit -m "testing"
 press push to
+
+adding in config/config.json:
+  "logging": false"
+to turn off log query
