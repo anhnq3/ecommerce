@@ -23,8 +23,15 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: true
             }
+        },
+        role: {
+            type: DataTypes.ENUM('admin', 'manager'),
+            allowNull: false,
+            defaultValue: 'admin'
         }
-    })
+    },
+
+    {freezeTableName: true})
 
     return Admin
 }

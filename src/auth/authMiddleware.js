@@ -223,42 +223,42 @@ const login = async (req, res, next) => {
 
 // Register
 const register = async (req, res, next) => {
-    // Joi check
-    const { error } = authValidation.registerSchema(req.body)
-    if (error) return console.log(error)
-
-    const { username, email, phoneNum, password, adress, role, checkVerify } = req.body
-
-    // Check username
-    const usernameCheck = async () => {
-        const registfind = await users.findAll({
-            where: {
-                username: username
-            }
-        }).catch(err => console.log(err))
-
-        if (registfind.length > 0) {
-            return res.send('This username has been registed')
-        }
-        else {
-            const salt = await bcrypt.genSalt(10)
-            const hashedPassword = await bcrypt.hash(password, salt)
-
-            users.create({
-                username: username,
-                email: email,
-                password: hashedPassword,
-                adress: adress,
-                phoneNum: phoneNum,
-                role: role,
-                checkVerify: checkVerify
+        // Joi check
+        const { error } = authValidation.registerSchema(req.body)
+        if (error) return console.log(error)
+    
+        const { username, email, phoneNum, password, adress, role, checkVerify } = req.body
+    
+        // Check username
+        const usernameCheck = async () => {
+            const registfind = await users.findAll({
+                where: {
+                    username: username
+                }
             }).catch(err => console.log(err))
-
-                .then((add) => {
-                    emailValidate(add.id)
-                })
-            next()
-        }
+    
+            if (registfind.length > 0) {
+                return res.send('This username has been registed')
+            }
+            else {
+                const salt = await bcrypt.genSalt(10)
+                const hashedPassword = await bcrypt.hash(password, salt)
+    
+                users.create({
+                    username: username,
+                    email: email,
+                    password: hashedPassword,
+                    adress: adress,
+                    phoneNum: phoneNum,
+                    role: role,
+                    checkVerify: checkVerify
+                }).catch(err => console.log(err))
+    
+                    .then((add) => {
+                        emailValidate(add.id)
+                    })
+                next()
+                }
     }
 
     // Check email

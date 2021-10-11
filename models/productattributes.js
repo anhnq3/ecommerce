@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Session = sequelize.define('session', {
+    const Productattributes = sequelize.define('productattributes', {
         id: {
             type: DataTypes.INTEGER,
             unique: true,
@@ -9,31 +9,30 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
-        jwt: {
-            type: DataTypes.STRING(500),
-            unique: true,
-            allowNull: false,
+        color: {
+            type: DataTypes.STRING(),
+            allowNull: true,
             validate: {
                 notEmpty: true
             }
         },
-        refreshToken: {
-            type: DataTypes.STRING,
+        type: {
+            type: DataTypes.STRING(),
+            allowNull: true,
             validate: {
                 notEmpty: true
             }
         },
         
-    },
-    {freezeTableName: true})
+    })
 
-    Session.associate = models => {
-        Session.belongsTo(models.users, {
+    Productattributes.associate = models => {
+        Productattributes.belongsTo(models.products, {
             foreignkey: {
                 allowNull: false
             }
         })
     }
     
-    return Session
+    return Productattributes
 }

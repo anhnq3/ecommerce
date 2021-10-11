@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Session = sequelize.define('session', {
+    const Order = sequelize.define('order', {
         id: {
             type: DataTypes.INTEGER,
             unique: true,
@@ -9,31 +9,38 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
-        jwt: {
-            type: DataTypes.STRING(500),
-            unique: true,
+        orderquantity: {
+            type: DataTypes.INTEGER(),
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        refreshToken: {
-            type: DataTypes.STRING,
+        ordertotalprice: {
+            type: DataTypes.INTEGER(),
+            allowNull: false,
             validate: {
                 notEmpty: true
             }
-        },
-        
+        }
     },
-    {freezeTableName: true})
 
-    Session.associate = models => {
-        Session.belongsTo(models.users, {
+        { freezeTableName: true })
+
+    Order.associate = model => {
+        Order.belongsTo(model.products, {
             foreignkey: {
                 allowNull: false
             }
         })
     }
-    
-    return Session
+
+    Order.associate = model => {
+        Order.hasOne(model.ordermain, {
+            primaryKey: {
+                allowNull: false
+            }
+        })
+    }
+    return Order
 }

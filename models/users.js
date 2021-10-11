@@ -66,6 +66,18 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 'verify needed',
         }
     })
+    
+    Users.associate = models => {
+        Users.hasOne(models.session, {
+            onDelete: "cascade"
+        })
+    }
+
+    Users.associate = models => {
+        Users.hasMany(models.ordermain, {
+            onDelete: "cascade"
+        })
+    }
 
     return Users
 }

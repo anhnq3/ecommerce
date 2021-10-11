@@ -5,3 +5,21 @@ press push to
 adding in config/config.json:
   "logging": false"
 to turn off log query
+
+associate: products has one catergory id
+
+// Products
+  Products.associate = models => {
+    Products.belongsTo(models.catergory, {
+      foreignkey: {
+        allowNull: false
+      }
+    })
+  }
+ 
+// Catergory
+Catergory.associate = models => {
+Catergory.hasMany(models.products, {
+    onDelete: "cascade"
+  })
+}

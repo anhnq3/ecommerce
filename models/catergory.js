@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Session = sequelize.define('session', {
+    const Category = sequelize.define('category', {
         id: {
             type: DataTypes.INTEGER,
             unique: true,
@@ -9,16 +9,15 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
-        jwt: {
-            type: DataTypes.STRING(500),
-            unique: true,
+        categoryname: {
+            type: DataTypes.STRING(),
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        refreshToken: {
-            type: DataTypes.STRING,
+        categoryicon: {
+            type: DataTypes.BLOB(),
             validate: {
                 notEmpty: true
             }
@@ -27,13 +26,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {freezeTableName: true})
 
-    Session.associate = models => {
-        Session.belongsTo(models.users, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
-    
-    return Session
+        Category.associate = models => {
+            Category.hasMany(models.products, {
+                onDelete: "cascade"
+            })
+        }
+        
+    return Category
 }
