@@ -34,6 +34,10 @@ const Logout = async (req, res) => {
     res.send('Loged out')
 }
 
+// Delete
+const Deleteuser = async (req, res) => {
+    res.send('Delete account completed')
+}
 
 module.exports = {
     Login,
@@ -42,5 +46,6 @@ module.exports = {
     ForgotPassword,
     Update,
     Logout,
-    ResetPassword
+    ResetPassword,
+    Deleteuser
 }

@@ -23,7 +23,10 @@ router.post('/user/resetpassword',middlewareUser.resetpassword, authController.R
 // Update
 router.get('/user/update', middlewareUser.update, authController.Update)
 
-//Logout
+// Logout
 router.post('/user/logout',middlewareUser.logout, authController.Logout)
+
+// Delete user
+router.post('/user/delete', middlewareUser.deleteuser, authController.Deleteuser)
 
 module.exports = router

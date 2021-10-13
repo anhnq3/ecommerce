@@ -222,12 +222,15 @@ const login = async (req, res, next) => {
 
 // Register
 const register = async (req, res, next) => {
-        // Joi check
-        const { error } = authValidation.registerSchema(req.body)
-        if (error) return console.log(error)
-    
+    // Joi check
+    const { error } = authValidation.registerSchema(req.body)
+    if (error) {
+        console.log(error)
+        return res.send('Validate failed')
+    }
+    else {
         const { username, email, phoneNum, password, adress, role, checkVerify } = req.body
-    
+
         // Check username
         const usernameCheck = async () => {
             const registfind = await users.findAll({
@@ -235,14 +238,14 @@ const register = async (req, res, next) => {
                     username: username
                 }
             }).catch(err => console.log(err))
-    
+
             if (registfind.length > 0) {
                 return res.send('This username has been registed')
             }
             else {
                 const salt = await bcrypt.genSalt(10)
                 const hashedPassword = await bcrypt.hash(password, salt)
-    
+
                 users.create({
                     username: username,
                     email: email,
@@ -252,91 +255,95 @@ const register = async (req, res, next) => {
                     role: role,
                     checkVerify: checkVerify
                 }).catch(err => console.log(err))
-    
+
                     .then((add) => {
+                        console.log('user created: ', add)
                         emailValidate(add.id)
                     })
                 next()
+            }
+        }
+
+        // Check email
+        const emailCheck = async () => {
+            const registfind = await users.findAll({
+                where: {
+                    email: email
                 }
-    }
-
-    // Check email
-    const emailCheck = async () => {
-        const registfind = await users.findAll({
-            where: {
-                email: email
-            }
-        }).catch(err => console.log(err))
-
-        if (registfind.length > 0) return res.send('This email has been registed')
-        else {
-            const salt = await bcrypt.genSalt(10)
-            const hashedPassword = await bcrypt.hash(password, salt)
-
-            users.create({
-                username: username,
-                email: email,
-                password: hashedPassword,
-                adress: adress,
-                phoneNum: phoneNum,
-                role: role,
-                checkVerify: checkVerify
             }).catch(err => console.log(err))
-            next()
-        }
-    }
 
-    // Check password
-    const phoneNumCheck = async () => {
-        const phoneNumFind = await users.findAll({
-            where: {
-                phoneNum: phoneNum
-            }
-        }).catch(err => console.log(err))
-
-        if (phoneNumFind.length > 0) return res.send('This phone number has been registed')
-        else {
-            const salt = await bcrypt.genSalt(10)
-            const hashedPassword = await bcrypt.hash(password, salt)
-
-            users.create({
-                username: username,
-                email: email,
-                password: hashedPassword,
-                adress: adress,
-                phoneNum: phoneNum,
-                role: role,
-                checkVerify: checkVerify
-            }).catch(err => console.log(err))
-            next()
-        }
-    }
-
-    usernameCheck()
-    // emailCheck()
-    // phoneNumCheck()
-
-
-    const emailValidate = (uuid) => {
-        // Email detail
-        var mailOption = {
-            from: 'quanganh',
-            to: 'anhnq3@vmodev.com',
-            subject: 'Verify your account',
-            text: `Click to this link to verify your account: \n
-                http://localhost:8080/user/verify?id=${uuid}`
-        }
-        transporter.sendMail(mailOption, (err, data) => {
-            if (err) {
-                console.log(err)
-            }
+            if (registfind.length > 0) return res.send('This email has been registed')
             else {
-                console.log('Email verify sent')
+                const salt = await bcrypt.genSalt(10)
+                const hashedPassword = await bcrypt.hash(password, salt)
+
+                users.create({
+                    username: username,
+                    email: email,
+                    password: hashedPassword,
+                    adress: adress,
+                    phoneNum: phoneNum,
+                    role: role,
+                    checkVerify: checkVerify
+                }).catch(err => console.log(err))
+                next()
             }
-        })
+        }
+
+        // Check password
+        const phoneNumCheck = async () => {
+            const phoneNumFind = await users.findAll({
+                where: {
+                    phoneNum: phoneNum
+                }
+            }).catch(err => console.log(err))
+
+            if (phoneNumFind.length > 0) return res.send('This phone number has been registed')
+            else {
+                const salt = await bcrypt.genSalt(10)
+                const hashedPassword = await bcrypt.hash(password, salt)
+
+                users.create({
+                    username: username,
+                    email: email,
+                    password: hashedPassword,
+                    adress: adress,
+                    phoneNum: phoneNum,
+                    role: role,
+                    checkVerify: checkVerify
+                }).catch(err => console.log(err))
+                next()
+            }
+        }
+
+        usernameCheck()
+        // emailCheck()
+        // phoneNumCheck()
+
+
+        const emailValidate = (uuid) => {
+            // Email detail
+            var mailOption = {
+                from: 'quanganh',
+                to: 'anhnq3@vmodev.com',
+                subject: 'Verify your account',
+                text: `Click to this link to verify your account: \n
+                http://localhost:8080/user/verify?id=${uuid}`
+            }
+            transporter.sendMail(mailOption, (err, data) => {
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    console.log('Email verify sent')
+                }
+            })
+        }
     }
+
 }
 
+// Logout(delete session)
 async function logout(req, res, next) {
     const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
     if (detroy < 1)
@@ -344,6 +351,7 @@ async function logout(req, res, next) {
     next()
 }
 
+// Verify after receive email
 const verify = async (req, res, next) => {
     if (req.query.id) {
         const update_checkVerify = await users.update(
@@ -363,6 +371,7 @@ const verify = async (req, res, next) => {
     }
 }
 
+// Forgot password(Get email)
 const forgotpassword = async (req, res, next) => {
     const { email } = req.body
     // console.log('email: ', email)
@@ -394,6 +403,7 @@ const forgotpassword = async (req, res, next) => {
     next()
 }
 
+// Reset password (After received email)
 const resetpassword = async (req, res, next) => {
     const { password } = req.body
     if (req.query.resetpassword) {
@@ -415,15 +425,16 @@ const resetpassword = async (req, res, next) => {
     else return res.json('error')
 }
 
-const update = async(req, res, next) => {
+// Update user account just owned account
+const update = async (req, res, next) => {
     // Check data
     const { error } = authValidation.updateSchema(req.body)
     if (error) return console.log(error)
 
-    const { userId , name, email, adress, phoneNum, password} = req.body
+    const { userId, name, email, adress, phoneNum, password } = req.body
 
     // Update name
-    if(userId && name){
+    if (userId && name) {
         const updateName = await users.update(
             {
                 name: name
@@ -439,7 +450,7 @@ const update = async(req, res, next) => {
     }
 
     // Update email
-    if(userId && email){
+    if (userId && email) {
         const updateEmail = await users.update(
             {
                 email: email
@@ -453,9 +464,9 @@ const update = async(req, res, next) => {
         console.log('Email updated');
         next()
     }
-    
+
     // Update user address
-    if(userId && adress){
+    if (userId && adress) {
         const updateAdress = await users.update(
             {
                 adress: adress
@@ -471,7 +482,7 @@ const update = async(req, res, next) => {
     }
 
     // Update user phoneNum
-    if(userId && phoneNum){
+    if (userId && phoneNum) {
         const updatePhonenum = await users.update(
             {
                 phoneNum: phoneNum
@@ -487,7 +498,7 @@ const update = async(req, res, next) => {
     }
 
     // Update user password
-    if(userId && password){
+    if (userId && password) {
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
@@ -505,6 +516,17 @@ const update = async(req, res, next) => {
     }
 }
 
+// Delete user account
+const deleteuser = async (req, res, next) => {
+    try {const detroy = await users.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
+    if (detroy < 1)
+        return console.log('User not exsits')
+    next()}
+    catch(err){
+        return console.log(err)
+    }
+}
+
 module.exports = {
     login,
     register,
@@ -512,5 +534,6 @@ module.exports = {
     verify,
     forgotpassword,
     resetpassword,
-    update
+    update,
+    deleteuser
 }

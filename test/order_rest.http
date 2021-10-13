@@ -1,5 +1,5 @@
 ### ALL FLASH SALE
-GET http://localhost:8080/orders
+GET http://localhost:8080/order
 
 ### ADD FLASH SALE
 POST http://localhost:8080/order/addorder

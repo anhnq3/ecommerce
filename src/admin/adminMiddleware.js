@@ -1,5 +1,7 @@
 const { admins } = require('../../models')
-const { session } = require('../../models')
+
+// const { session } = require('../../models')
+
 const adminValidation = require('./adminValidation')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -38,23 +40,24 @@ const login = async (req, res, next) => {
                 }
             )
 
-            await session.create({
-                userId: admindetail.id,
-                jwt: token
-            }).catch(err => console.log(err))
+            // await session.create({
+            //     userId: admindetail.id,
+            //     jwt: token
+            // }).catch(err => console.log(err))
 
-            const sessiondb = await session.findAll({
-                where: {
-                    userId: admindetail.id
-                }
-            }).catch(err => console.log(err))
+            // const sessiondb = await session.findAll({
+            //     where: {
+            //         userId: admindetail.id
+            //     }
+            // }).catch(err => console.log(err))
 
-            var sessionId = sessiondb[0].id
-            console.log('sessionId: ', sessionId)
-            console.log('Remember to logout')
+            // var sessionId = sessiondb[0].id
+            // console.log('sessionId: ', sessionId)
+            // console.log('Remember to logout')
 
             return res.status(200).json({
                 message: "Auth successful",
+                userId: admindetail.id,
                 token: token
             })
         }

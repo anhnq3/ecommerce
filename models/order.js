@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         productId: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             validate: {
                 notEmpty: true
             }
@@ -34,19 +35,20 @@ module.exports = (sequelize, DataTypes) => {
         { freezeTableName: true })
 
     Order.associate = model => {
-        Order.belongsTo(model.products, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
-
-    Order.associate = model => {
         Order.hasOne(model.ordermain, {
             primaryKey: {
                 allowNull: false
             }
         })
     }
+
+    Order.associate = models => {
+        Order.belongsTo(models.products, {
+            foreignkey: {
+                allowNull: false
+            }
+        })
+    }
+
     return Order
 }

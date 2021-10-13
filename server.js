@@ -29,8 +29,8 @@ const flashsaleRouter = require('./src/flashsale/flashsaleAPI')
 app.use(flashsaleRouter)
 
 // Order Router
-// const orderRouter = require('./src/order/orderAPI')
-// app.use(orderRouter)
+const orderRouter = require('./src/order/orderAPI')
+app.use(orderRouter)
 
 db.sequelize.sync().then((req) => {
     app.listen(PORT, () => console.log(`Running on port: ${PORT}`))

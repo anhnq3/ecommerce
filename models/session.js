@@ -9,6 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            },
+        },
         jwt: {
             type: DataTypes.STRING(500),
             unique: true,

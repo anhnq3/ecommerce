@@ -17,14 +17,6 @@ Content-Type: application/json
     "role": "admin"
 }
 
-### LOG OUT ADMIN
-POST http://localhost:8080/admin/logout
-Content-Type: application/json
-
-{
-    "id": 3
-}
-
 ### DELETE ADMIN
 ### Only admin can do it
 POST http://localhost:8080/admin/deleteadmin

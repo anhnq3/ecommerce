@@ -69,13 +69,15 @@ module.exports = (sequelize, DataTypes) => {
     
     Users.associate = models => {
         Users.hasOne(models.session, {
-            onDelete: "cascade"
+            onDelete: "cascade",
+            
         })
     }
 
     Users.associate = models => {
         Users.hasMany(models.ordermain, {
-            onDelete: "cascade"
+            onDelete: "cascade",
+            hooks: true
         })
     }
 
