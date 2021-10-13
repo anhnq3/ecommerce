@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Admin = sequelize.define('admin', {
+    const Category = sequelize.define('category', {
         id: {
             type: DataTypes.INTEGER,
             unique: true,
@@ -9,29 +9,29 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
-        username: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-            validate: {
-                notEmpty: true
-            }
-        },
-        password: {
-            type: DataTypes.STRING,
+        categoryname: {
+            type: DataTypes.STRING(),
+            unique:true,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        role: {
-            type: DataTypes.ENUM('admin', 'manager'),
-            allowNull: false,
-            defaultValue: 'admin'
-        }
+        categoryicon: {
+            type: DataTypes.STRING(),
+            validate: {
+                notEmpty: true
+            }
+        },
+        
     },
-
     {freezeTableName: true})
 
-    return Admin
+        Category.associate = models => {
+            Category.hasMany(models.products, {
+                onDelete: "cascade"
+            })
+        }
+        
+    return Category
 }

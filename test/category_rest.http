@@ -1,0 +1,19 @@
+### ALL CATEGORY
+GET http://localhost:8080/category
+
+### ADD CATEGORY
+POST http://localhost:8080/category/addcategory
+Content-Type: application/json
+
+{
+    "categoryname": "xyz"
+}
+
+### DELETE CATEGORY
+POST http://localhost:8080/category/deletecategory
+Content-Type: application/json
+
+{
+    "categoryname": "xyz"
+}
+

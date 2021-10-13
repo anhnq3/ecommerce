@@ -1,0 +1,72 @@
+### ALL FLASH SALE
+GET http://localhost:8080/flashsale
+
+### ADD FLASH SALE
+POST http://localhost:8080/flashsale/addflashsale
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename2",
+    "flashsalediscount": "flashsalediscount", 
+    "flashsalestartdate": "Date: 03/02/2022",
+    "flashsaleenddate": "Date: 02/03/2021",
+    "flashsalestatus": "active",
+    "flashsalequantity": "flashsalequantity",
+    "code": "code"
+}
+
+### DELETE FLASH SALE
+POST http://localhost:8080/flashsale/deleteflashsale
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename2"
+}
+
+
+### UPDATE
+### UPDATE FLASH SALE DISCOUNT
+POST http://localhost:8080/flashsale/update
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename",
+    "flashsalediscount": 10
+}
+
+### UPDATE DATE TIME
+POST http://localhost:8080/flashsale/update
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename",
+    "flashsalestartdate": "Date: 04/14/1999",
+    "flashsaleenddate": "Date: 05/15/2000"
+}
+
+### UPDATE FLASH SALE STATUS
+POST http://localhost:8080/flashsale/update
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename",
+    "flashsalestatus": "active"
+}
+
+### UPDATE FLASH SALE QUANTITY
+POST http://localhost:8080/flashsale/update
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename",
+    "flashsalequantity": 3
+}
+
+### UPDATE FLASH SALE CODE
+POST http://localhost:8080/flashsale/update
+Content-Type: application/json
+
+{
+    "flashsalename": "flashsalename",
+    "code": "ASJDKHUI"
+}

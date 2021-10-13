@@ -1,0 +1,54 @@
+### LOGIN
+POST http://localhost:8080/admin/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+### ADD ADMIN
+POST http://localhost:8080/admin/adduser
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin",
+    "role": "admin"
+}
+
+### LOG OUT ADMIN
+POST http://localhost:8080/admin/logout
+Content-Type: application/json
+
+{
+    "id": 3
+}
+
+### DELETE ADMIN
+### Only admin can do it
+POST http://localhost:8080/admin/deleteadmin
+Content-Type: application/json
+
+{
+    "username": "manager"
+}
+
+### PASS CHANGE
+POST http://localhost:8080/admin/passchange
+Content-Type: application/json
+
+{
+    "id": "1",
+    "password": "admin"
+}
+
+### ROLE SET
+### Only admin can do it
+POST http://localhost:8080/admin/roleset
+Content-Type: application/json
+
+{
+    "username": "manager",
+    "role": "manager"
+}

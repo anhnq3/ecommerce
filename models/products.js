@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
+        categoryId: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: true
+            },
+        },
         productname: {
             type: DataTypes.STRING(),
             allowNull: false,

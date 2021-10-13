@@ -12,11 +12,6 @@ app.use(express.static(publicDirectory))
 
 const db = require('./models')
 
-
-db.sequelize.sync().then((req) => {
-    app.listen(PORT, () => console.log(`Running on port: ${PORT}`))
-})
-
 // Auth Router
 const authRouter = require('./src/auth/authAPI')
 app.use(authRouter)
@@ -24,3 +19,20 @@ app.use(authRouter)
 // Admin Router
 const adminRouter = require('./src/admin/adminAPI')
 app.use(adminRouter)
+
+// Category Router
+const categoryRouter = require('./src/category/categoryAPI')
+app.use(categoryRouter) 
+
+// Flash sale Router
+const flashsaleRouter = require('./src/flashsale/flashsaleAPI')
+app.use(flashsaleRouter)
+
+// Order Router
+// const orderRouter = require('./src/order/orderAPI')
+// app.use(orderRouter)
+
+db.sequelize.sync().then((req) => {
+    app.listen(PORT, () => console.log(`Running on port: ${PORT}`))
+})
+

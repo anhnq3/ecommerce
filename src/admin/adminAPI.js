@@ -6,13 +6,26 @@ const adminController = require('./adminController')
 const adminMiddleware = require('./adminMiddleware')
 
 // Login
-router.get('/admin', adminMiddleware.login, adminController.Login)
+router.post('/admin/login', adminMiddleware.login, adminController.Login)
 
 // Logout
-router.get('/admin/logout', adminMiddleware.logout, adminController.Logout)
+router.post('/admin/logout', adminMiddleware.logout, adminController.Logout)
 
 // Change password
-router.get('/admin', adminMiddleware.passchange, adminController.Passchange)
+router.post('/admin/passchange', adminMiddleware.passchange, adminController.Passchange)
+
+// Change role
+// Just user have a "admin" role to allow to do this
+router.post('/admin/roleset', adminMiddleware.roleset, adminController.Roleset)
+
+// Add user
+router.post('/admin/adduser', adminMiddleware.addadmin, adminController.Addadmin)
+
+// Delete account
+// Just user have a "admin" role to allow to delete user
+router.post('/admin/deleteadmin', adminMiddleware.deleteadmin, adminController.Deleteadmin)
+
+
 
 
 module.exports = router

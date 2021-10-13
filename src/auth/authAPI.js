@@ -26,6 +26,4 @@ router.get('/user/update', middlewareUser.update, authController.Update)
 //Logout
 router.post('/user/logout',middlewareUser.logout, authController.Logout)
 
-// const authValidation = require('./authValidation')
-
 module.exports = router

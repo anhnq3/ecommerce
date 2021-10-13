@@ -1,23 +1,33 @@
 const Login = async (req, res) => {
-    // const { username, email, phoneNum, password } = req.body
-    // res.send(`You are logged in, Welcome ${user.username}`)
-    res.send('You are logged in as a user')
+    res.send('Password incorrect')
+    
 }
 
 const Logout = async (req, res) => {
-    // const { username, email, phoneNum, password } = req.body
-    // res.send(`You are logged in, Welcome ${user.username}`)
-    res.send('You are logged in as a user')
+    res.send('Logout complete')
 }
 
 const Passchange = async (req, res) => {
-    // const { username, email, phoneNum, password } = req.body
-    // res.send(`You are logged in, Welcome ${user.username}`)
-    res.send('You are logged in as a user')
+    res.send('Your password has been changed')
+}
+
+const Roleset = async (req, res) => {
+    res.send ('Set role complete')
+}
+
+const Addadmin = async (req, res) => {
+    res.send('Adding admin successful')
+}
+
+const Deleteadmin = async(req, res) => {
+    res.send('Delelte successful')
 }
 
 module.exports = {
     Login,
     Logout,
-    Passchange
+    Passchange,
+    Roleset,
+    Addadmin,
+    Deleteadmin
 }

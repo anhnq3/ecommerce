@@ -3,7 +3,7 @@ git commit -m "testing"
 press push to
 
 adding in config/config.json:
-  "logging": false"
+  "logging": false
 to turn off log query
 
 associate: products has one catergory id

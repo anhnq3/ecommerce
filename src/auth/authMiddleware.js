@@ -33,7 +33,7 @@ const login = async (req, res, next) => {
         }).catch(err => res.send(err))
 
         if (user.length < 1) return res.send('Incorrect Username and/or Password!')
-        user_password = user[0].password
+        const user_password = user[0].password
         const check = await bcrypt.compare(password, user_password)
         if (!check) {
             return res.send('Incorrect Username and/or Password!')
@@ -65,13 +65,13 @@ const login = async (req, res, next) => {
                     jwt: token
                 }).catch(err => console.log(err))
 
-                const result2 = await session.findAll({
+                const sessiondb = await session.findAll({
                     where: {
                         userId: user.id
                     }
                 }).catch(err => console.log(err))
 
-                sessionId = result2[0].id
+                sessionId = sessiondb[0].id
                 console.log('________________________________')
                 console.log('sessionId: ', sessionId)
                 console.log('Remember to logout')
@@ -81,10 +81,9 @@ const login = async (req, res, next) => {
                     message: "Auth successful",
                     token: token
                 })
-                next()
             }
             else {
-                return res.send('Incorrect Username and/or Password!');
+                next()
             }
         }
 
@@ -131,13 +130,13 @@ const login = async (req, res, next) => {
                     jwt: token
                 }).catch(err => console.log(err))
 
-                const result2 = await session.findAll({
+                const sessiondb = await session.findAll({
                     where: {
                         userId: user.id
                     }
                 }).catch(err => console.log(err))
 
-                sessionId = result2[0].id
+                sessionId = sessiondb[0].id
                 console.log('________________________________')
                 console.log('sessionId: ', sessionId)
                 console.log('Remember to logout')
@@ -196,13 +195,13 @@ const login = async (req, res, next) => {
                     jwt: token
                 }).catch(err => console.log(err))
 
-                const result2 = await session.findAll({
+                const sessiondb = await session.findAll({
                     where: {
                         userId: user.id
                     }
                 }).catch(err => console.log(err))
 
-                sessionId = result2[0].id
+                sessionId = sessiondb[0].id
                 console.log('________________________________')
                 console.log('sessionId: ', sessionId)
                 console.log('Remember to logout')

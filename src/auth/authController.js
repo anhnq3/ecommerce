@@ -2,7 +2,7 @@
 const Login = async (req, res) => {
     // const { username, email, phoneNum, password } = req.body
     // res.send(`You are logged in, Welcome ${user.username}`)
-    res.send('OKAY')
+    res.send('Incorrect Username and/or Password!')
 }
 
 // Register

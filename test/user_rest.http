@@ -3,10 +3,10 @@ POST http://localhost:8080/user/login
 Content-Type: application/json
 
 {
-    "username": "admin1",
+    "username": "admin",
     # "phoneNum": "0123456789",
     # "email": "admin@gmail.com",
-    "password": "admin1"
+    "password": "admin"
 }
 
 ### REGISTER
@@ -29,7 +29,7 @@ POST http://localhost:8080/user/logout
 Content-Type: application/json
 
 {
-    "id": 4
+    "id": 8
 }
 
 ### FORGOT PASSWORD

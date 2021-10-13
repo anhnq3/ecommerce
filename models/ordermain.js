@@ -9,6 +9,24 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
+        flashsaleId: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: true
+            }
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: true
+            }
+        },
+        orderId: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: true
+            }
+        },
         totalprice: {
             type: DataTypes.INTEGER(),
             allowNull: false,

@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
+        productId: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: true
+            }
+        },
         color: {
             type: DataTypes.STRING(),
             allowNull: true,
