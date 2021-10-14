@@ -3,10 +3,10 @@ POST http://localhost:8080/user/login
 Content-Type: application/json
 
 {
-    "username": "admin2",
+    "username": "admin",
     # "phoneNum": "0123456789",
     # "email": "admin@gmail.com",
-    "password": "admin2"
+    "password": "admin"
 }
 
 ### REGISTER
@@ -14,10 +14,10 @@ POST http://localhost:8080/user/register
 Content-Type: application/json
 
 {
-    "username": "admin2",
-    "email": "admin2@gmail.com",
-    "password": "admin2",
-    "name": "admin2",
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "password": "admin",
+    "name": "admin",
     "adress": "admin adress",
     "phoneNum": "0123456781",
     "role": "admin",
@@ -54,7 +54,7 @@ POST http://localhost:8080/user/delete
 Content-Type: application/json
 
 {
-    "id": 14
+    "id": 1
 }
 
 

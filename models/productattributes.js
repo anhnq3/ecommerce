@@ -32,13 +32,13 @@ module.exports = (sequelize, DataTypes) => {
         
     })
 
-    Productattributes.associate = models => {
-        Productattributes.belongsTo(models.products, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
+    // Productattributes.associate = models => {
+    //     Productattributes.belongsTo(models.products, {
+    //         foreignkey: {
+    //             allowNull: false
+    //         }
+    //     })
+    // }
     
     return Productattributes
 }

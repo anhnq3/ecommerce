@@ -16,6 +16,9 @@ const addorder = async (req, res, next) => {
     const { error } = orderValidation.createSchema(req.body)
     if (error) return console.log(error)
 
+    // order check
+    const {productId, orderquantity, ordertotalprice} = req.body
+
 }
 
 const deleteorder = async (req, res, next) => {

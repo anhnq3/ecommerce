@@ -1,3 +1,5 @@
+const users = require('./users')
+
 module.exports = (sequelize, DataTypes) => {
     const Session = sequelize.define('session', {
         id: {
@@ -34,13 +36,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     {freezeTableName: true})
 
-    Session.associate = models => {
-        Session.belongsTo(models.users, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
+    // Reference of session and user
+    const userModel = users(sequelize, DataTypes)
+
+    userModel.hasOne(Session, {
+        onDelete: "cascade"
+    })
+
+    // Session.associate = models => {
+    //     Session.belongsTo(models.users, {
+    //         foreignkey: {
+    //             allowNull: false
+    //         }
+    //     })
+    // }
     
     return Session
 }

@@ -1,5 +1,3 @@
-const { extend } = require("joi")
-
 module.exports = (sequelize, DataTypes) => {
     const Products = sequelize.define('products', {
         id: {
@@ -59,14 +57,14 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 1
         },
         mainimg: {
-            type: DataTypes.BLOB(),
+            type: DataTypes.STRING(),
             allowNull: true,
             validate: {
                 notEmpty: true
             }
         },
         imgs: {
-            type: DataTypes.BLOB(),
+            type: DataTypes.STRING(),
             allowNull: true,
             validate: {
                 notEmpty: true
@@ -104,13 +102,13 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: "cascade"
         })
     }
-    Products.associate = models => {
-        Products.belongsTo(models.category, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
+    // Products.associate = models => {
+    //     Products.belongsTo(models.category, {
+    //         foreignkey: {
+    //             allowNull: false
+    //         }
+    //     })
+    // }
 
     return Products
 }

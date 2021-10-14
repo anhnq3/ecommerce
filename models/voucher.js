@@ -67,13 +67,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {freezeTableName: true})
 
-    Voucher.associate = models => {
-        Voucher.belongsTo(models.products, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
+    // Voucher.associate = models => {
+    //     Voucher.belongsTo(models.products, {
+    //         foreignkey: {
+    //             allowNull: false
+    //         }
+    //     })
+    // }
     
     return Voucher
 }

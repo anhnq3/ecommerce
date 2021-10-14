@@ -42,13 +42,13 @@ module.exports = (sequelize, DataTypes) => {
         })
     }
 
-    Order.associate = models => {
-        Order.belongsTo(models.products, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
+    // Order.associate = models => {
+    //     Order.belongsTo(models.products, {
+    //         foreignkey: {
+    //             allowNull: false
+    //         }
+    //     })
+    // }
 
     return Order
 }

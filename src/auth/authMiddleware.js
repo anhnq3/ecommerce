@@ -72,10 +72,8 @@ const login = async (req, res, next) => {
                 }).catch(err => console.log(err))
 
                 sessionId = sessiondb[0].id
-                console.log('________________________________')
                 console.log('sessionId: ', sessionId)
                 console.log('Remember to logout')
-                console.log('________________________________')
 
                 return res.status(200).json({
                     message: "Auth successful",
@@ -137,10 +135,8 @@ const login = async (req, res, next) => {
                 }).catch(err => console.log(err))
 
                 sessionId = sessiondb[0].id
-                console.log('________________________________')
                 console.log('sessionId: ', sessionId)
                 console.log('Remember to logout')
-                console.log('________________________________')
 
                 return res.status(200).json({
                     message: "Auth successful",
@@ -202,10 +198,8 @@ const login = async (req, res, next) => {
                 }).catch(err => console.log(err))
 
                 sessionId = sessiondb[0].id
-                console.log('________________________________')
                 console.log('sessionId: ', sessionId)
                 console.log('Remember to logout')
-                console.log('________________________________')
 
                 return res.status(200).json({
                     message: "Auth successful",

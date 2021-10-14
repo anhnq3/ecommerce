@@ -1,3 +1,5 @@
+const session = require("./session")
+
 module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define('users', {
         id: {
@@ -66,11 +68,19 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 'verify needed',
         }
     })
+
+    // const sessionModel = session(sequelize, DataTypes)
+
+        // sessionModel.belongsTo(Users, {
+        //     foreignkey: {
+        //         allowNull: false
+        //     }
+        // })
+    
     
     Users.associate = models => {
         Users.hasOne(models.session, {
             onDelete: "cascade",
-            
         })
     }
 
