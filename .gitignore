@@ -106,4 +106,6 @@ dist
 =======
 node_modules
 .env
+note*
+done*
 >>>>>>> 86ad2bd (First commit)
