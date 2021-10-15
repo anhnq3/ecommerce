@@ -1,0 +1,44 @@
+### ALL PRODUCTS
+GET http://localhost:8080/products
+
+### ADD PRODUCTS
+POST http://localhost:8080/products/addproducts
+Content-Type: application/json
+
+{
+    "productname": "name1",
+    "categoryId": 1,
+    "barcode": "11111111111112",
+    "importprice": 10000,
+    "sellingprice": 12000,
+    "weight": 3,
+    "mainimg": "mainimg",
+    "imgs": "imgs",
+    "quantity": 3,
+    "description": "no description"
+}
+
+### DELETE PRODUCTS
+POST http://localhost:8080/products/deleteproducts
+Content-Type: application/json
+
+{
+    "id": 10
+}
+
+### UPDATE PRODUCTS
+POST http://localhost:8080/products/updateproducts
+Content-Type: application/json
+
+{
+    "id": 9,
+    "productname": "productname",
+    "barcode": "barcode",
+    "importprice": 1000,
+    "sellingprice": 2000,
+    "weight": 100,
+    "mainimg": "mainimg",
+    "imgs": "imgs",
+    "quantity": 3,
+    "description": "description"
+}

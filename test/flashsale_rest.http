@@ -6,12 +6,12 @@ POST http://localhost:8080/flashsale/addflashsale
 Content-Type: application/json
 
 {
-    "flashsalename": "flashsalename2",
-    "flashsalediscount": "flashsalediscount", 
+    "flashsalename": "flashsalename3",
+    "flashsalediscount": 5, 
     "flashsalestartdate": "Date: 03/02/2022",
     "flashsaleenddate": "Date: 02/03/2021",
     "flashsalestatus": "active",
-    "flashsalequantity": "flashsalequantity",
+    "flashsalequantity": 2,
     "code": "code"
 }
 

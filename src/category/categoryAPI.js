@@ -13,5 +13,6 @@ router.post('/category/addcategory', categoryMiddleware.addcategory, categoryCon
 // Delete category
 router.post('/category/deletecategory', categoryMiddleware.deletecategory, categoryController.Deletecategory)
 
+router.post('/category/updatecategory', categoryMiddleware.updatecategory, categoryController.Updatecategory)
 
 module.exports = router

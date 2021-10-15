@@ -14,7 +14,7 @@ router.post('/products/addproducts', productsMiddleware.addproducts, productsCon
 router.post('/products/deleteproducts', productsMiddleware.deleteproducts, productsController.Deleteproducts)
 
 // Update products
-router.post('/products/update', productsMiddleware.updateproducts, productsController.Updateproducts)
+router.post('/products/updateproducts', productsMiddleware.updateproducts, productsController.Updateproducts)
 
 
 module.exports = router

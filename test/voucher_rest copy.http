@@ -1,0 +1,35 @@
+### ALL PRODUCT ATTRIBUTES
+GET http://localhost:8080/voucher
+
+### ADD PRODUCT ATTRIBUTES
+POST http://localhost:8080/voucher/addvoucher
+Content-Type: application/json
+
+{
+   "productId": 1, 
+   "voucherdiscount": 5, 
+   "vouchername": "voucher1", 
+   "voucherstartdate": "Date: 04/14/2002", 
+   "voucherenddate": "Date: 04/14/2002", 
+   "voucherstatus": "active", 
+   "voucherquantity": 3, 
+   "code": "code"
+}
+
+### DELETE PRODUCT ATTRIBUTES
+POST http://localhost:8080/voucher/deletevoucher
+Content-Type: application/json
+
+{
+    "code": "code"
+}
+
+### UPDATE PRODUCT ATTRIBUTES
+POST http://localhost:8080/voucher/updatevoucher
+Content-Type: application/json
+
+{
+    "productId": 3,
+    "color": "orange",
+    "type": "big"
+}

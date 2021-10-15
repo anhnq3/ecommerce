@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         barcode: {
-            type: DataTypes.INTEGER(),
+            type: DataTypes.STRING(),
             unique: true,
             allowNull: false,
             validate: {

@@ -1,4 +1,4 @@
-const { products } = require('../../models')
+const { products, category } = require('../../models')
 const productsValidation = require('./productsValidate')
 
 const all = async (req, res, next) => {
@@ -17,30 +17,53 @@ const addproducts = async (req, res, next) => {
     if (error) return console.log(error)
 
     const { categoryId, productname, barcode, importprice, sellingprice, weight, mainimg, imgs, quantity, description } = req.body
-    
-    // products check
-    await products.findAll({
+
+    // Category id check
+    await category.findAll({
         where: {
-            productsname: productsname
+            id: categoryId
         }
     }).catch((err) => console.log(err))
-
         .then(async (result) => {
-            if (result.length > 0)
-                return res.json('This flash sale name already in your products')
+            if (result.length < 1) {
+                return res.send('categoryId not found')
+            }
             else {
-                await products.create({
-                    productsname: productsname,
-                    productsdiscount: productsdiscount,
-                    productsstartdate: productsstartdate,
-                    productsenddate: productsenddate,
-                    productsstatus: productsstatus,
-                    productsquantity: productsquantity,
-                    code: code
+                // products check
+                await products.findAll({
+                    where: {
+                        productname: productname,
+                    }
                 }).catch((err) => console.log(err))
-                next()
+
+                    .then(async (result) => {
+                        if (result.length > 0)
+                            return res.json('This product name already in your products')
+                        else {
+                            await products.create({
+                                productname: productname,
+                                categoryId: categoryId,
+                                barcode: barcode,
+                                importprice: importprice,
+                                sellingprice: sellingprice,
+                                weight: weight,
+                                mainimg: mainimg,
+                                imgs: imgs,
+                                quantity: quantity,
+                                description: description
+                            }).catch((err) => console.log(err))
+                            .then((result) => {
+                                if(result) next()
+                                else {
+                                    res.send('product hasn\'t added')
+                                }
+                            })
+                        }
+                    })
             }
         })
+
+
 }
 
 const deleteproducts = async (req, res, next) => {
@@ -48,11 +71,11 @@ const deleteproducts = async (req, res, next) => {
     const { error } = productsValidation.deleteSchema(req.body)
     if (error) return console.log(error)
 
-    const { productsname } = req.body
+    const { id } = req.body
 
     const destroy = await products.destroy({
         where: {
-            productsname: productsname
+            id: id
         }
     }).catch((err) => console.log(err))
     if (destroy > 0)
@@ -64,17 +87,18 @@ const updateproducts = async (req, res, next) => {
     // Joi check
     const { error } = productsValidation.updateSchema(req.body)
     if (error) return console.log(error)
-    
-    const { productsname, productsdiscount, productsstartdate, productsenddate, productsstatus, productsquantity, code } = req.body
 
-    if(productsname){
-        if (productsdiscount) {
+    const { id,categoryId, productname, barcode, importprice, sellingprice, weight, mainimg, imgs, quantity, description } = req.body
+
+    if (productname) {
+        // Update category
+        if(categoryId) {
             await products.update(
                 {
-                    productsdiscount: productsdiscount
+                    categoryId: categoryId
                 },
                 {
-                    where: { productsname: productsname }
+                    where: { productname: productname }
                 }).catch((err) => console.log(err))
                 .then((result) => {
                     if (result[0] === 0) {
@@ -85,85 +109,28 @@ const updateproducts = async (req, res, next) => {
                     }
                 })
         }
-    
-        if (productsstartdate && productsenddate) {
+        else {
             await products.update(
                 {
-                    productsstartdate: productsstartdate,
-                    productsenddate: productsenddate
+                    productname: productname,
+                    barcode: barcode,
+                    importprice: importprice,
+                    sellingprice: sellingprice,
+                    weight: weight,
+                    mainimg: mainimg,
+                    imgs: imgs,
+                    quantity: quantity,
+                    description: description
                 },
                 {
-                    where: { productsname: productsname }
-                }).catch((err) => console.log(err))
-    
-                .then((result) => {
-                    if (result[0] === 0) {
-                        return res.json('Update failed')
+                    where: {
+                        id: id
                     }
-                    else {
-                        next()
-                    }
-                })
-        }
-
-        if (productsstatus) {
-            products.update(
-                {
-                    productsstatus: productsstatus
-                },
-                {
-                    where: { productsname: productsname }
-                }).catch((err) => console.log(err))
-    
-                .then((result) => {
-                    if (result[0] === 0) {
-                        return res.json('Update failed')
-                    }
-                    else {
-                        next()
-                    }
-                })
-            }
-    
-        if(productsquantity){
-            await products.update(
-                {
-                    productsquantity: productsquantity
-                },
-                {
-                    where: { productsname: productsname }
-                }).catch((err) => console.log(err))
-    
-                .then((result) => {
-                    if (result[0] === 0) {
-                        return res.json('Update failed')
-                    }
-                    else {
-                        next()
-                    }
-                })
-        }
-
-        if(code){
-            await products.update(
-                {
-                    code: code
-                },
-                {
-                    where: { productsname: productsname }
-                }).catch((err) => console.log(err))
-    
-                .then((result) => {
-                    if (result[0] === 0) {
-                        return res.json('Update failed')
-                    }
-                    else {
-                        next()
-                    }
-                })
+                }
+            )
         }
     }
-    
+
 }
 
 module.exports = {

@@ -29,7 +29,7 @@ POST http://localhost:8080/user/logout
 Content-Type: application/json
 
 {
-    "id": 1
+    "id": 2
 }
 
 ### FORGOT PASSWORD

@@ -6,7 +6,7 @@ POST http://localhost:8080/category/addcategory
 Content-Type: application/json
 
 {
-    "categoryname": "xyz"
+    "categoryname": "xyzxs"
 }
 
 ### DELETE CATEGORY
@@ -15,5 +15,15 @@ Content-Type: application/json
 
 {
     "categoryname": "xyz"
+}
+
+
+### UPDATE CATEGORY
+POST http://localhost:8080/category/updatecategory
+Content-Type: application/json
+
+{
+    "categoryname": "xyzx",
+    "newcategoryname": "xyzss"
 }
 

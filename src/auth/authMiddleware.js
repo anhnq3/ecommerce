@@ -251,7 +251,6 @@ const register = async (req, res, next) => {
                 }).catch(err => console.log(err))
 
                     .then((add) => {
-                        console.log('user created: ', add)
                         emailValidate(add.id)
                     })
                 next()
@@ -341,7 +340,7 @@ const register = async (req, res, next) => {
 async function logout(req, res, next) {
     const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
     if (detroy < 1)
-        return console.log('________________________________\nLogout wrong session Id please logout again\n________________________________')
+        return console.log('Logout wrong session Id please logout again')
     next()
 }
 

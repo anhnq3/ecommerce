@@ -2,9 +2,10 @@ const Joi = require('joi')
 
 const createSchema = data => {
     const schema = Joi.object().keys({
-        productId: Joi.number().required(),
-        orderquantity: Joi.number().required(),
-        ordertotalprice: Joi.number()
+        userId: Joi.number().required(),
+        orderId: Joi.number().required(),
+        flashsaleId: Joi.number(),
+        totalprice: Joi.number()
     }).unknown()
 
     return schema.validate(data)
@@ -12,7 +13,7 @@ const createSchema = data => {
 
 const deleteSchema = data => {
     const schema = Joi.object().keys({
-        productId: Joi.number().required()
+        
     }).unknown()
 
     return schema.validate(data)
@@ -20,8 +21,7 @@ const deleteSchema = data => {
 
 const updateSchema = data => {
     const schema = Joi.object().keys({
-        orderquantity: Joi.number().required(),
-        ordertotalprice: Joi.number().required()        
+               
     }). unknown()
 
     return schema.validate(data)

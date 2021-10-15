@@ -1,0 +1,30 @@
+### ALL PRODUCT ATTRIBUTES
+GET http://localhost:8080/productattributes
+
+### ADD PRODUCT ATTRIBUTES
+POST http://localhost:8080/productattributes/addproductattributes
+Content-Type: application/json
+
+{
+   "productId": 2, 
+   "color": "red", 
+   "type": "medium"
+}
+
+### DELETE PRODUCT ATTRIBUTES
+POST http://localhost:8080/productattributes/deleteproductattributes
+Content-Type: application/json
+
+{
+    "productId": 2
+}
+
+### UPDATE PRODUCT ATTRIBUTES
+POST http://localhost:8080/productattributes/updateproductattributes
+Content-Type: application/json
+
+{
+    "productId": 3,
+    "color": "orange",
+    "type": "big"
+}

@@ -14,7 +14,7 @@ router.post('/order/addorder', orderMiddleware.addorder, orderController.Addorde
 router.post('/order/deleteorder', orderMiddleware.deleteorder, orderController.Deleteorder)
 
 // Update order
-router.post('/order/update', orderMiddleware.updateorder, orderController.Updateorder)
+router.post('/order/updateorder', orderMiddleware.updateorder, orderController.Updateorder)
 
 
 module.exports = router

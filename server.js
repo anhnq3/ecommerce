@@ -36,6 +36,18 @@ app.use(orderRouter)
 const productRouter = require('./src/products/productsAPI')
 app.use(productRouter)
 
+// Ordermain Router
+const ordermainRouter = require('./src/ordermain/ordermainAPI')
+app.use(ordermainRouter)
+
+// Productattributes Router
+const productattributesRouter = require('./src/productattributes/productattributesAPI')
+app.use(productattributesRouter)
+
+// voucher Router
+const voucherRouter = require('./src/voucher/voucherAPI')
+app.use(voucherRouter)
+
 db.sequelize.sync().then((req) => {
     app.listen(PORT, () => console.log(`Running on port: ${PORT}`))
 })

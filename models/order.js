@@ -9,6 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             },
             primaryKey: true
         },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
         productId: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -34,6 +41,12 @@ module.exports = (sequelize, DataTypes) => {
 
         { freezeTableName: true })
 
+        Order.associate = models => {
+            Order.hasOne(models.user, {
+                onDelete: "cascade"
+            })
+        }
+
     Order.associate = model => {
         Order.hasOne(model.ordermain, {
             primaryKey: {
@@ -41,6 +54,8 @@ module.exports = (sequelize, DataTypes) => {
             }
         })
     }
+
+    
 
     // Order.associate = models => {
     //     Order.belongsTo(models.products, {

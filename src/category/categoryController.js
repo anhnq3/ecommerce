@@ -11,8 +11,13 @@ const Addcategory = (req, res) => {
     res.send('Category added success')
 }
 
+const Updatecategory = (req, res) => {
+    res.send('Category updated')
+}
+
 module.exports = {
     All,
     Deletecategory,
-    Addcategory
+    Addcategory,
+    Updatecategory
 }

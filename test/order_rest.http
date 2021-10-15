@@ -1,72 +1,29 @@
-### ALL FLASH SALE
+### ALL ORDER
 GET http://localhost:8080/order
 
-### ADD FLASH SALE
+### ADD ORDER
 POST http://localhost:8080/order/addorder
 Content-Type: application/json
 
 {
-    "ordername": "ordername2",
-    "orderdiscount": "orderdiscount", 
-    "orderstartdate": "Date: 03/02/2022",
-    "orderenddate": "Date: 02/03/2021",
-    "orderstatus": "active",
-    "orderquantity": "orderquantity",
-    "code": "code"
+    "userId": 1,
+    "productId": 2,
+    "orderquantity": 9
 }
 
-### DELETE FLASH SALE
+### DELETE ORDER
 POST http://localhost:8080/order/deleteorder
 Content-Type: application/json
 
 {
-    "ordername": "ordername2"
+    "productId": 9
 }
 
-
-### UPDATE
-### UPDATE FLASH SALE DISCOUNT
-POST http://localhost:8080/order/update
+### UPDATE ORDER
+POST http://localhost:8080/order/updateorder
 Content-Type: application/json
 
 {
-    "ordername": "ordername",
-    "orderdiscount": 10
-}
-
-### UPDATE DATE TIME
-POST http://localhost:8080/order/update
-Content-Type: application/json
-
-{
-    "ordername": "ordername",
-    "orderstartdate": "Date: 04/14/1999",
-    "orderenddate": "Date: 05/15/2000"
-}
-
-### UPDATE FLASH SALE STATUS
-POST http://localhost:8080/order/update
-Content-Type: application/json
-
-{
-    "ordername": "ordername",
-    "orderstatus": "active"
-}
-
-### UPDATE FLASH SALE QUANTITY
-POST http://localhost:8080/order/update
-Content-Type: application/json
-
-{
-    "ordername": "ordername",
-    "orderquantity": 3
-}
-
-### UPDATE FLASH SALE CODE
-POST http://localhost:8080/order/update
-Content-Type: application/json
-
-{
-    "ordername": "ordername",
-    "code": "ASJDKHUI"
+    "productId": 9,
+    "orderquantity": 1
 }

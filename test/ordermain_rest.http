@@ -1,0 +1,11 @@
+### GET ALL ORDERMAIN
+GET http://localhost:8080/ordermain
+
+### ADD ORDERMAIN
+POST http://localhost:8080/ordermain/addordermain
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "flashsaleId": 2
+}

@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const createSchema = data => {
     const schema = Joi.object().keys({
-        flashsalediscount: Joi.string().min(4).max(30).required().default('10'), 
+        flashsalediscount: Joi.number().required().default('10'), 
         flashsalename: Joi.string().required(),
         flashsalestartdate: Joi.date().required(),
         flashsaleenddate: Joi.date().required(),
