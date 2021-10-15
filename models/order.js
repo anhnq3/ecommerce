@@ -49,9 +49,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Order.associate = model => {
         Order.hasOne(model.ordermain, {
-            primaryKey: {
-                allowNull: false
-            }
+            onDelete: "cascade"
         })
     }
 

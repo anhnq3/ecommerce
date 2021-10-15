@@ -32,13 +32,13 @@ module.exports = (sequelize, DataTypes) => {
     
     {freezeTableName: true})
 
-    Ordermain.associate = model => {
-        Ordermain.belongsTo(model.flashsale, {
-            foreignkey: {
-                allowNull: false
-            }
-        })
-    }
+    // Ordermain.associate = model => {
+    //     Ordermain.belongsTo(model.flashsale, {
+    //         foreignkey: {
+    //             allowNull: false
+    //         }
+    //     })
+    // }
 
     Ordermain.associate = models => {
         Ordermain.hasOne(models.user, {
