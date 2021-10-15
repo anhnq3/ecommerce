@@ -1,6 +1,8 @@
 git add .
 git commit -m "testing"
 press push to
+to ignor all file with same name add "*" in the end
+
 
 adding in config/config.json:
   "logging": false
