@@ -1,4 +1,8 @@
 // Login
+const getLogin = (req,res) => {
+    res.render('login')
+
+}
 const Login = async (req, res) => {
     // const { username, email, phoneNum, password } = req.body
     // res.send(`You are logged in, Welcome ${user.username}`)
@@ -32,6 +36,7 @@ const Update = async (req, res) => {
 // Logout
 const Logout = async (req, res) => {
     res.send('Loged out')
+    // res.render('login')
 }
 
 // Delete
@@ -47,5 +52,6 @@ module.exports = {
     Update,
     Logout,
     ResetPassword,
-    Deleteuser
+    Deleteuser,
+    getLogin
 }

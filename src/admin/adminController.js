@@ -1,6 +1,10 @@
+const getLogin = (req, res) => {
+    // res.send('This is admin login template')
+    res.render('adminlogin')
+}
+
 const Login = async (req, res) => {
-    res.send('Password incorrect')
-    
+    res.send('Password incorrect')   
 }
 
 const Logout = async (req, res) => {
@@ -24,6 +28,7 @@ const Deleteadmin = async(req, res) => {
 }
 
 module.exports = {
+    getLogin,
     Login,
     Logout,
     Passchange,

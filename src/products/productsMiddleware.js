@@ -1,12 +1,18 @@
 const { products, category } = require('../../models')
 const productsValidation = require('./productsValidate')
 
+var checkCookie = false
+
 const all = async (req, res, next) => {
-    await products.findAll()
+    if(req.cookies.login_user_id) checkCookie = true
+    else checkCookie = false
+    await products.findAll({ raw: true })
         .catch((err) => console.log(err))
         .then((result) => {
-            if (result.length > 0)
+            if (result.length > 0) {
+                // return res.render('home', { result, checkCookie })
                 return res.send(result)
+            }
             next()
         })
 }
@@ -52,30 +58,27 @@ const addproducts = async (req, res, next) => {
                                 quantity: quantity,
                                 description: description
                             }).catch((err) => console.log(err))
-                            .then((result) => {
-                                if(result) next()
-                                else {
-                                    res.send('product hasn\'t added')
-                                }
-                            })
+                                .then((result) => {
+                                    if (result) next()
+                                    else {
+                                        res.send('product hasn\'t added')
+                                    }
+                                })
                         }
                     })
             }
         })
-
-
 }
 
 const deleteproducts = async (req, res, next) => {
     // Joi check
-    const { error } = productsValidation.deleteSchema(req.body)
+    const { error } = productsValidation.deleteSchema(req.params)
     if (error) return console.log(error)
 
-    const { id } = req.body
 
     const destroy = await products.destroy({
         where: {
-            id: id
+            id: req.params.id
         }
     }).catch((err) => console.log(err))
     if (destroy > 0)
@@ -88,24 +91,28 @@ const updateproducts = async (req, res, next) => {
     const { error } = productsValidation.updateSchema(req.body)
     if (error) return console.log(error)
 
-    const { id,categoryId, productname, barcode, importprice, sellingprice, weight, mainimg, imgs, quantity, description } = req.body
-
-    if (productname) {
+    const { id, imgs, productname, categoryId, barcode, importprice, sellingprice, weight, mainimg, quantity, description } = req.body
+    
+    if (id) {
         // Update category
-        if(categoryId) {
+        if (categoryId) {
             await products.update(
                 {
                     categoryId: categoryId
                 },
                 {
-                    where: { productname: productname }
+                    where: { 
+                        // productname: productname
+                        id: id
+                    }
                 }).catch((err) => console.log(err))
                 .then((result) => {
-                    if (result[0] === 0) {
-                        return res.json('Update failed')
+                    console.log(result)
+                    if (result[0] != 0) {
+                        next()
                     }
                     else {
-                        next()
+                        return res.json('Update failed')
                     }
                 })
         }
@@ -133,9 +140,29 @@ const updateproducts = async (req, res, next) => {
 
 }
 
+const getupdateproduct = async (req, res, next) => {
+    await products.findAll({
+        raw: true,
+        where: {
+            id: req.params.id
+        }
+    })
+        .catch((err) => console.log(err))
+        .then((result) => {
+            if (result.length > 0) {
+                res.render('edit-product', { result })
+            }
+            else {
+                next()
+
+            }
+        })
+}
+
 module.exports = {
     all,
     deleteproducts,
     addproducts,
-    updateproducts
+    updateproducts,
+    getupdateproduct
 }

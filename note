@@ -8,7 +8,16 @@ adding in config/config.json:
   "logging": false
 to turn off log query
 
+npm i swagger-jsdoc swagger-ui-express
+  add swagger.json in src
+npm i handlebars -g
+npm i cookie-parser -g
+
 associate: products has one catergory id
+
+adding raw in the end to  execute the previous data of sequelize 
+    await products.findAll({raw: true})
+
 
 // Products
   Products.associate = models => {

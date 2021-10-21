@@ -4,8 +4,9 @@ const { session } = require('../../models')
 const { users } = require('../../models')
 const authValidation = require('./authValidation')
 const nodemailer = require('nodemailer')
+const cookieParser = require('cookie-parser')
 
-var sessionId
+var sessionId_cookie
 
 // Using email with this
 const transporter = nodemailer.createTransport({
@@ -18,11 +19,19 @@ const transporter = nodemailer.createTransport({
 
 // Login
 const login = async (req, res, next) => {
+    if (req.cookies.login_user_id)
+        checkCookie = true
+    else checkCookie = false
+    const { username, email, phoneNum, password } = req.body
+
+    if (username === '' || password === '') {
+        return res.send('username/password is empty')
+        // return res.render('login')
+    }
+
     // Joi check
     const { error } = authValidation.loginSchema(req.body)
     if (error) return console.log(error)
-
-    const { username, email, phoneNum, password } = req.body
 
     // By usermame
     if (username && password) {
@@ -32,11 +41,15 @@ const login = async (req, res, next) => {
             }
         }).catch(err => res.send(err))
 
-        if (user.length < 1) return res.send('Incorrect Username and/or Password!')
+        if (user.length < 1) {
+            return res.send('Incorrect Username and/or Password!')
+            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
+        }
         const user_password = user[0].password
         const check = await bcrypt.compare(password, user_password)
         if (!check) {
             return res.send('Incorrect Username and/or Password!')
+            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
         }
         if (check) {
             const result = await users.findAll({
@@ -71,14 +84,17 @@ const login = async (req, res, next) => {
                     }
                 }).catch(err => console.log(err))
 
-                sessionId = sessiondb[0].id
-                console.log('sessionId: ', sessionId)
+                sessionId_cookie = sessiondb[0].id
+                console.log('sessionId_cookie: ', sessionId_cookie)
                 console.log('Remember to logout')
+
+                res.cookie('login_user_id', user.id)
 
                 return res.status(200).json({
                     message: "Auth successful",
                     token: token
                 })
+                // return res.render('dashboard')
             }
             else {
                 next()
@@ -134,9 +150,9 @@ const login = async (req, res, next) => {
                     }
                 }).catch(err => console.log(err))
 
-                sessionId = sessiondb[0].id
-                console.log('sessionId: ', sessionId)
-                console.log('Remember to logout')
+                // sessionId_cookie = sessiondb[0].id
+                // console.log('sessionId_cookie: ', sessionId_cookie)
+                // console.log('Remember to logout')
 
                 return res.status(200).json({
                     message: "Auth successful",
@@ -197,8 +213,8 @@ const login = async (req, res, next) => {
                     }
                 }).catch(err => console.log(err))
 
-                sessionId = sessiondb[0].id
-                console.log('sessionId: ', sessionId)
+                sessionId_cookie = sessiondb[0].id
+                console.log('sessionId_cookie: ', sessionId_cookie)
                 console.log('Remember to logout')
 
                 return res.status(200).json({
@@ -223,7 +239,7 @@ const register = async (req, res, next) => {
         return res.send('Validate failed')
     }
     else {
-        const { username, email, phoneNum, password, adress, role, checkVerify } = req.body
+        const { name, username, email, phoneNum, password, adress, role, checkVerify } = req.body
 
         // Check username
         const usernameCheck = async () => {
@@ -241,6 +257,7 @@ const register = async (req, res, next) => {
                 const hashedPassword = await bcrypt.hash(password, salt)
 
                 users.create({
+                    name: name,
                     username: username,
                     email: email,
                     password: hashedPassword,
@@ -338,10 +355,19 @@ const register = async (req, res, next) => {
 
 // Logout(delete session)
 async function logout(req, res, next) {
-    const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
-    if (detroy < 1)
-        return console.log('Logout wrong session Id please logout again')
-    next()
+    if (req.cookies.login_user_id) {
+        // const detroy = await session.destroy({ where: { id: sessionId_cookie } }).catch((err) => console.log(err))
+        // const detroy = await session.destroy({ where: { userId:req.cookies.login_user_id } }).catch((err) => console.log(err))
+        const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
+        if (detroy < 1)
+            return res.send('You are already logged out')
+        res.clearCookie('login_user_id');
+        next()
+    }
+    else {
+        res.send('You hasn\'t login yet')
+    }
+
 }
 
 // Verify after receive email
@@ -426,96 +452,123 @@ const update = async (req, res, next) => {
 
     const { userId, name, email, adress, phoneNum, password } = req.body
 
-    // Update name
-    if (userId && name) {
-        const updateName = await users.update(
-            {
-                name: name
-            },
-            {
-                where: {
-                    id: userId
+    if (userId) {
+        // Update name
+        if (userId && name) {
+            await users.update(
+                {
+                    name: name
+                },
+                {
+                    where: {
+                        id: userId
+                    }
                 }
-            }
-        ).catch((err) => console.log(err))
-        console.log('Name updated');
+            ).catch((err) => console.log(err))
+            .then((result) => {
+                if(result[0] === 1) {
+                    console.log('Name updated');
+                }
+            })
+            // next()
+        }
+
+        // Update email
+        if (userId && email) {
+            await users.update(
+                {
+                    email: email
+                },
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            ).catch((err) => console.log(err))
+            .then((result1) => {
+                if(result1[0] === 1) {
+                    console.log('Email updated');
+                }
+            })
+            // next()
+        }
+
+        // Update user address
+        if (userId && adress) {
+            await users.update(
+                {
+                    adress: adress
+                },
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            ).catch((err) => console.log(err))
+            .then((result2) => {
+                if(result2[0] === 1)
+                {
+                    console.log('Address updated')
+                }
+            })
+            // next()
+        }
+
+        // Update user phoneNum
+        if (userId && phoneNum) {
+            await users.update(
+                {
+                    phoneNum: phoneNum
+                },
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            ).catch((err) => console.log(err))
+            .then((result3) => {
+                if(result3[0] === 1) {
+                    console.log('Phone number updated');
+                }
+            })
+            // next()
+        }
+
+        // Update user password
+        if (userId && password) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+
+            await users.update(
+                {
+                    password: hashedPassword
+                },
+                {
+                    where: {
+                        id: userId
+                    }
+                }).catch((err) => console.log(err))
+                .then((result4) => {
+                    if(result4[0] === 1) {
+                        console.log('Password updated');
+                    }
+                })
+            // next()
+        }
         next()
     }
 
-    // Update email
-    if (userId && email) {
-        const updateEmail = await users.update(
-            {
-                email: email
-            },
-            {
-                where: {
-                    id: userId
-                }
-            }
-        ).catch((err) => console.log(err))
-        console.log('Email updated');
-        next()
-    }
-
-    // Update user address
-    if (userId && adress) {
-        const updateAdress = await users.update(
-            {
-                adress: adress
-            },
-            {
-                where: {
-                    id: userId
-                }
-            }
-        ).catch((err) => console.log(err))
-        console.log('Adress updated');
-        next()
-    }
-
-    // Update user phoneNum
-    if (userId && phoneNum) {
-        const updatePhonenum = await users.update(
-            {
-                phoneNum: phoneNum
-            },
-            {
-                where: {
-                    id: userId
-                }
-            }
-        ).catch((err) => console.log(err))
-        console.log('Phone number updated');
-        next()
-    }
-
-    // Update user password
-    if (userId && password) {
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, salt)
-
-        await users.update(
-            {
-                password: hashedPassword
-            },
-            {
-                where: {
-                    id: userId
-                }
-            }).catch((err) => console.log(err))
-        console.log('Password updated');
-        next()
-    }
 }
 
 // Delete user account
 const deleteuser = async (req, res, next) => {
-    try {const detroy = await users.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
-    if (detroy < 1)
-        return console.log('User not exsits')
-    next()}
-    catch(err){
+    try {
+        const detroy = await users.destroy({ where: { id: req.params.id } }).catch((err) => console.log(err))
+        if (detroy < 1)
+            return console.log('User not exsits')
+        next()
+    }
+    catch (err) {
         return console.log(err)
     }
 }

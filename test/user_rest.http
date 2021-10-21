@@ -1,5 +1,5 @@
  ### LOGIN
-POST http://localhost:8080/user/login
+POST http://localhost:8080/login
 Content-Type: application/json
 
 {
@@ -14,22 +14,23 @@ POST http://localhost:8080/user/register
 Content-Type: application/json
 
 {
+    "name": "admin",
     "username": "admin",
     "email": "admin@gmail.com",
     "password": "admin",
     "name": "admin",
     "adress": "admin adress",
-    "phoneNum": "0123456781",
+    "phoneNum": "012345678",
     "role": "admin",
     "checkVerify": "verify needed"
 }
 
 ### LOGOUT
-POST http://localhost:8080/user/logout
+DELETE http://localhost:8080/user/logout
 Content-Type: application/json
 
 {
-    "id": 2
+    "id": 59
 }
 
 ### FORGOT PASSWORD
@@ -50,13 +51,8 @@ Content-Type: application/json
 }
 
 ### DELETE USER
-POST http://localhost:8080/user/delete
+DELETE http://localhost:8080/user/delete/8
 Content-Type: application/json
-
-{
-    "id": 1
-}
-
 
 ### UPDATE USER
 ### UPDATE NAME
@@ -65,7 +61,7 @@ Content-Type: application/json
 
 {
     "userId": "1",
-    "name": "admin Nguyen"
+    "name": "customer"
 }
 
 ### UPDATE ADDRESS

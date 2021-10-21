@@ -39,11 +39,13 @@ const login = async (req, res, next) => {
                 }
             )
 
-            return res.status(200).json({
-                message: "Auth successful",
-                userId: admindetail.id,
-                token: token
-            })
+            // return res.status(200).json({
+            //     message: "Auth successful",
+            //     userId: admindetail.id,
+            //     token: token
+            // })
+            
+            return res.render('dashboard')
         }
     }
     next()

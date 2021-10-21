@@ -6,7 +6,8 @@ const adminController = require('./adminController')
 const adminMiddleware = require('./adminMiddleware')
 
 // Login
-router.post('/admin/login', adminMiddleware.login, adminController.Login)
+router.get('/admin', adminController.getLogin)
+router.post('/admin', adminMiddleware.login, adminController.Login)
 
 // Logout
 router.post('/admin/logout', adminMiddleware.logout, adminController.Logout)

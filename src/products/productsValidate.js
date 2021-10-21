@@ -27,11 +27,12 @@ const deleteSchema = data => {
 
 const updateSchema = data => {
     const schema = Joi.object().keys({
+        id: Joi.number().required(),
         categoryId: Joi.number(),
-        productname: Joi.string().required(),
-        barcode: Joi.string().max(12).required(),
-        importprice: Joi.number().required(),
-        sellingprice: Joi.number().required(),
+        productname: Joi.string(),
+        barcode: Joi.string().max(12),
+        importprice: Joi.number(),
+        sellingprice: Joi.number(),
         weight: Joi.number().default(100),
         mainimg: Joi.string(),
         imgs: Joi.string(),
