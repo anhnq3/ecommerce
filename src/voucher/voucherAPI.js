@@ -11,7 +11,7 @@ router.get('/voucher', voucherMiddleware.all, voucherController.All)
 router.post('/voucher/addvoucher', voucherMiddleware.addvoucher, voucherController.Addvoucher)
 
 // Delete voucher
-router.post('/voucher/deletevoucher', voucherMiddleware.deletevoucher, voucherController.Deletevoucher)
+router.delete('/voucher/deletevoucher', voucherMiddleware.deletevoucher, voucherController.Deletevoucher)
 
 // Update voucher
 router.post('/voucher/updatevoucher', voucherMiddleware.updatevoucher, voucherController.Updatevoucher)

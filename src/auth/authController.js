@@ -1,47 +1,46 @@
 // Login
 const getLogin = (req,res) => {
-    res.render('login')
-
+    res.json('This is login template')
 }
 const Login = async (req, res) => {
     // const { username, email, phoneNum, password } = req.body
-    // res.send(`You are logged in, Welcome ${user.username}`)
-    res.send('Incorrect Username and/or Password!')
+    // res.json(`You are logged in, Welcome ${user.username}`)
+    res.json('Incorrect Username and/or Password!')
 }
 
 // Register
 const Register = async (req, res) => {
-    res.send('Registing done')
+    res.json('Registing done')
 }
 
 const Verify = async (req, res) => {
-    res.send('Update success')
+    res.json('Update success')
 }
 
 // Forgot password
 const ForgotPassword = async (req, res) => {
-    res.send('An restore password email have been sent to your email')
+    res.json('An restore password email have been sent to your email')
 }
 
 // Reset password
 const ResetPassword = async(req, res) => {
-    res.send('Password has been reseted')
+    res.json('Password has been reseted')
 }
 
 //Update
 const Update = async (req, res) => {
-    res.send('Your accoount has been updated')
+    res.json('Your accoount has been updated')
 }
 
 // Logout
 const Logout = async (req, res) => {
-    res.send('Loged out')
+    res.json('Loged out')
     // res.render('login')
 }
 
 // Delete
 const Deleteuser = async (req, res) => {
-    res.send('Delete account completed')
+    res.json('Delete account completed')
 }
 
 module.exports = {

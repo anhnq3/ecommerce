@@ -14,16 +14,16 @@ const login = async (req, res, next) => {
 
     // Admin check
     if (username && password) {
-        const admin = await admins.findAll({
+        const admin = await admins.findOne({
             where: {
                 username: username
             }
-        }).catch(err => res.send(err))
-        if (admin.length < 1)
-            return res.send('User incorrect')
+        }).catch(err => res.json(err))
+        if (!admin)
+            return res.json('User incorrect')
 
         // Get admin password and compare
-        const admindetail = admin[0]
+        const admindetail = admin
         const admin_password = admindetail.password
         const check = await bcrypt.compare(password, admin_password)
 
@@ -39,13 +39,13 @@ const login = async (req, res, next) => {
                 }
             )
 
-            // return res.status(200).json({
-            //     message: "Auth successful",
-            //     userId: admindetail.id,
-            //     token: token
-            // })
-            
-            return res.render('dashboard')
+            return res.status(200).json({
+                message: "Auth successful",
+                userId: admindetail.id,
+                token: token
+            })
+
+            // return res.render('dashboard')
         }
     }
     next()
@@ -62,7 +62,7 @@ const logout = async (req, res, next) => {
         .catch((err) => console.log(err))
     if (detroy > 0)
         return next()
-    res.send('You has insert wrong session id')
+    res.json('You has insert wrong session id')
 }
 
 const passchange = async (req, res, next) => {
@@ -72,20 +72,33 @@ const passchange = async (req, res, next) => {
 
     const { id, password } = req.body
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
+    //check admin
+    await admins.findOne({
+        where: {
+            id: id
+        }
+    }).catch((err) => console.log(err))
+    .then(async (result) => {
+        if(result) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+        
+            await admins.update(
+                {
+                    password: hashedPassword
+                },
+                {
+                    where: {
+                        id: id
+                    }
+                }).catch((err) => console.log(err))
+            console.log('Password updated');
+            next()
+        }
+        else return res.json('Admin id not found')
+    })
 
-    await admins.update(
-        {
-            password: hashedPassword
-        },
-        {
-            where: {
-                id: id
-            }
-        }).catch((err) => console.log(err))
-    console.log('Password updated');
-    next()
+    
 }
 
 const roleset = async (req, res, next) => {
@@ -95,19 +108,36 @@ const roleset = async (req, res, next) => {
 
     const { username, role } = req.body
 
-    await admins.update(
-        {
-            role: role
-        },
-        {
-            where: {
-                username: username
-            }
-        }).catch((err) => console.log(err))
-    .then((result) => {
-        if(result < 1) return res.send('Changing role not complete')
-    next() 
+    // Admin check
+    admins.findOne({
+        where: {
+            username: username
+        }
+    }).catch((err) => console.log(err))
+    .then(async (result) => {
+        if(result) {
+            await admins.update(
+                {
+                    role: role
+                },
+                {
+                    where: {
+                        username: username
+                    }
+                }).catch((err) => console.log(err))
+                .then((result) => {
+                    if (result < 1) return res.json('Changing role not complete')
+                    else {
+                        console.log('Role updated')
+                        next()
+                    }
+                })
+        }
+        else {
+            res.json('Username not found')
+        }
     })
+    
 }
 
 const addadmin = async (req, res, next) => {
@@ -117,15 +147,18 @@ const addadmin = async (req, res, next) => {
 
     const { username, password, role } = req.body
 
-    const adminCheck = async () => {
-        const admincheck = await admins.findAll({
-            where: {
-                username: username
-            }
-        }).catch((err) => console.log(err))
+    const admincheck = await admins.findOne({
+        where: {
+            username: username
+        }
+    }).catch((err) => console.log(err))
+    .then((result) => {
+        if(!result) console.log('added')
+        else console.log(result)
+    })
 
-        if (admincheck > 0) return res.send('This user already been used')
-
+    if (admincheck > 0) return res.json('This user already been used')
+    else {
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
@@ -136,7 +169,8 @@ const addadmin = async (req, res, next) => {
         }).catch(err => console.log(err))
         next()
     }
-    adminCheck()
+
+
 }
 
 const deleteadmin = async (req, res, next) => {
@@ -150,7 +184,7 @@ const deleteadmin = async (req, res, next) => {
         .catch((err) => console.log(err))
     if (detroy > 0)
         return next()
-    res.send('Failed to delete admin')
+    res.json('Username not exsits')
 }
 
 module.exports = {

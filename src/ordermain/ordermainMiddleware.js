@@ -6,7 +6,7 @@ const all = async (req, res, next) => {
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
-                return res.send(result)
+                return res.json(result)
             next()
         })
 }
@@ -39,7 +39,7 @@ const addordermain = async (req, res, next) => {
                 ).catch((err) => console.log(err))
                 .then((result1) => {
                     if(result1) next()
-                    else return res.send('ordermain not added')
+                    else return res.json('ordermain not added')
                 })
                 if(flashsaleId) {
                     await flashsale.findOne(
@@ -55,7 +55,7 @@ const addordermain = async (req, res, next) => {
                 }
         }
         else
-        res.send('No order has made')
+        res.json('No order has made')
     })
 }
 

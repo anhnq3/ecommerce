@@ -56,11 +56,12 @@ const addorder = async (req, res, next) => {
                             where: {productId: productId}
                         }
                     )
+                    next()
                 })
             }
             else {
                 // order total price
-                const productFind = await products.findOne(
+                await products.findOne(
                     {
                         where: {
                             id: productId
@@ -79,6 +80,7 @@ const addorder = async (req, res, next) => {
                                     ordertotalprice: ordertotalprice
                                 }
                             ).catch((err) => console.log(err))
+                            
                             next()
                         }
                         else {

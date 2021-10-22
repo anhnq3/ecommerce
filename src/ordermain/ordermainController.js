@@ -1,9 +1,9 @@
 const All = (req, res) => {
-    res.send('There is no ordermain')
+    res.json('There is no ordermain')
 }
 
 const Addordermain = (req, res) => {
-    res.send('ordermain added success')
+    res.json('ordermain added success')
 }
 
 module.exports = {

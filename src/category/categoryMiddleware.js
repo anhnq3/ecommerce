@@ -2,11 +2,11 @@ const { category } = require('../../models')
 const adminValidation = require('./categoryValidate')
 
 const all = async (req, res, next) => {
-    const all = await category.findAll()
+    await category.findAll()
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
-                return res.send(result)
+                return res.json(result)
             next()
         })
 }
@@ -25,7 +25,7 @@ const deletecategory = async (req, res, next) => {
     }).catch((err) => console.log(err))
     if (destroy > 0)
         return next()
-    return res.send('Failed to delete category')
+    return res.json('Failed to delete category')
 }
 
 const addcategory = async (req, res, next) => {
@@ -35,21 +35,25 @@ const addcategory = async (req, res, next) => {
 
     const { categoryname, categoryicon } = req.body
 
-    const categoryCheck = await category.findAll({
+    await category.findOne({
         where: {
             categoryname: categoryname
         }
     }).catch((err) => console.log(err))
-
-    if (categoryCheck > 0) return res.send('This category existed')
-
-    await category.create({
-        categoryname: categoryname,
-        categoryicon: categoryicon
-    }).catch((err) => console.log(err))
-    .then((result) => {
-        if(result) next()
-        else return res.send('category hasn\'t added')
+    .then(async (find) => {
+        if(find) {
+            return res.json('This category existed')
+        }
+        else {
+            await category.create({
+                categoryname: categoryname,
+                categoryicon: categoryicon
+            }).catch((err) => console.log(err))
+            .then((result) => {
+                if(result) next()
+                else return res.json('category hasn\'t added')
+            })
+        }
     })
 }
 
@@ -60,7 +64,7 @@ const updatecategory = async (req, res, next) => {
 
     const { categoryname, categoryicon, newcategoryname } = req.body
 
-    await category.findAll(
+    await category.findOne(
         {
             where: {
                 categoryname: categoryname
@@ -68,26 +72,38 @@ const updatecategory = async (req, res, next) => {
         }
     ).catch((err) => console.log(err))
     .then(async (result) => {
-        if(result.length < 1) 
-            return res.send('categoryname not found')
+        if(!result) 
+            return res.json('categoryname not found')
         else
         {
-            await category.update(
-                {
-                    categoryname: newcategoryname,
-                    categoryicon: categoryicon
-                },
+            //check category name
+            await category.findOne(
                 {
                     where: {
-                        categoryname: categoryname
+                        categoryname: newcategoryname
                     }
-            }).catch((err) => console.log(err))
-            
-            next()
+                }
+            ).then(async (result1) => {
+                if(result1) {
+                    res.json('This name has been used')
+                }
+                else {
+                    await category.update(
+                        {
+                            categoryname: newcategoryname,
+                            categoryicon: categoryicon
+                        },
+                        {
+                            where: {
+                                categoryname: categoryname
+                            }
+                    }).catch((err) => console.log(err))
+                    
+                    next()
+                }
+            })
         } 
-    })
-
-    
+    })    
 }
 
 module.exports = {

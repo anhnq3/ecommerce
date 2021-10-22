@@ -1,17 +1,17 @@
 const All = (req, res) => {
-    res.send('There is no product attributes')
+    res.json('There is no product attributes')
 }
 
 const Deleteproductattributes = (req, res) => {
-    res.send('product attributes deleted')
+    res.json('product attributes deleted')
 }
 
 const Addproductattributes = (req, res) => {
-    res.send('product attributes added success')
+    res.json('product attributes added success')
 }
 
 const Updateproductattributes = (req, res) => {
-    res.send('product attributes updated success')
+    res.json('product attributes updated success')
 }
 
 module.exports = {

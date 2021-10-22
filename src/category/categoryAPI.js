@@ -11,7 +11,7 @@ router.get('/category', categoryMiddleware.all, categoryController.All)
 router.post('/category/addcategory', categoryMiddleware.addcategory, categoryController.Addcategory)
 
 // Delete category
-router.post('/category/deletecategory', categoryMiddleware.deletecategory, categoryController.Deletecategory)
+router.delete('/category/deletecategory', categoryMiddleware.deletecategory, categoryController.Deletecategory)
 
 router.post('/category/updatecategory', categoryMiddleware.updatecategory, categoryController.Updatecategory)
 

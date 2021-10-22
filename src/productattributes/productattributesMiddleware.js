@@ -6,7 +6,7 @@ const all = async (req, res, next) => {
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
-                return res.send(result)
+                return res.json(result)
             next()
         }).catch((err) => console.log(err))
 }
@@ -28,7 +28,7 @@ const addproductattributes = async (req, res, next) => {
     ).catch((err) => console.log(err))
         .then(async(result2) => {
             if (result2.length == 0)
-                return res.send('Product not found')
+                return res.json('Product not found')
             else {
                 // product attribute check
                 await productattributes.findAll(
@@ -40,7 +40,7 @@ const addproductattributes = async (req, res, next) => {
                 ).catch((err) => console.log(err))
                     .then(async (result1) => {
                         if (result1.length != 0) {
-                            return res.send('this product already has attribute')
+                            return res.json('this product already has attribute')
                         }
                         else {
                             await productattributes.create(
@@ -53,7 +53,7 @@ const addproductattributes = async (req, res, next) => {
                                 .then((result) => {
                                     if (result) next()
                                     else
-                                        return res.send('product attribites hasn\'t added')
+                                        return res.json('product attribites hasn\'t added')
                                 })
                         }
                     })
@@ -72,7 +72,7 @@ const deleteproductattributes = async (req, res, next) => {
             productId: req.body.productId
         }
     }).catch((err) => console.log(err))
-    if (destroy < 1) return res.send('Product Id in order no found')
+    if (destroy < 1) return res.json('Product Id in order no found')
     else next()
 }
 
@@ -91,11 +91,11 @@ const updateproductattributes = async (req, res, next) => {
             }
         }
     ).catch((err) => console.log(err))
-        .then((result1) => {
-            if (!result1) return res.send('product attributes not updated')
+        .then(async (result1) => {
+            if (!result1) return res.json('product attributes not updated')
             else {
                 if (color) {
-                    productattributes.update(
+                    await productattributes.update(
                         {
                             color: color
                         },
@@ -107,11 +107,11 @@ const updateproductattributes = async (req, res, next) => {
                     ).catch((err) => console.log(err))
                         .then((result) => {
                             if (result) next()
-                            else return res.send('product attribute hasn\'t update')
+                            else return res.json('product attribute hasn\'t update')
                         })
                 }
                 if (type) {
-                    productattributes.update(
+                    await productattributes.update(
                         {
                             type: type
                         },
@@ -123,11 +123,11 @@ const updateproductattributes = async (req, res, next) => {
                     ).catch((err) => console.log(err))
                         .then((result) => {
                             if (result) next()
-                            else return res.send('product attribute hasn\'t update')
+                            else return res.json('product attribute hasn\'t update')
                         })
                 }
                 if (color && type) {
-                    productattributes.update(
+                    await productattributes.update(
                         {
                             color: color,
                             type: type
@@ -140,7 +140,7 @@ const updateproductattributes = async (req, res, next) => {
                     ).catch((err) => console.log(err))
                         .then((result) => {
                             if (result) next()
-                            else return res.send('product attribute hasn\'t update')
+                            else return res.json('product attribute hasn\'t update')
                         })
                 }
             }

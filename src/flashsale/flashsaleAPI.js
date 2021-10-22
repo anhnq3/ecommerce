@@ -11,7 +11,7 @@ router.get('/flashsale', flashsaleMiddleware.all, flashsaleController.All)
 router.post('/flashsale/addflashsale', flashsaleMiddleware.addflashsale, flashsaleController.Addflashsale)
 
 // Delete flashsale
-router.post('/flashsale/deleteflashsale', flashsaleMiddleware.deleteflashsale, flashsaleController.Deleteflashsale)
+router.delete('/flashsale/deleteflashsale', flashsaleMiddleware.deleteflashsale, flashsaleController.Deleteflashsale)
 
 // Update flashsale
 router.post('/flashsale/update', flashsaleMiddleware.updateflashsale, flashsaleController.Updateflashsale)

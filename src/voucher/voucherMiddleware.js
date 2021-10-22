@@ -7,7 +7,7 @@ const all = async (req, res, next) => {
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
-                return res.send(result)
+                return res.json(result)
             next()
         }).catch((err) => console.log(err))
 }
@@ -46,12 +46,12 @@ const addvoucher = async (req, res, next) => {
                     next()
                 }
                 else {
-                    return res.send('voucher hasn\'t added')
+                    return res.json('voucher hasn\'t added')
                 }
             })
         }
         else {
-            res.send('product not found')
+            res.json('product not found')
         }
     })
 }
@@ -69,7 +69,7 @@ const deletevoucher = async (req, res, next) => {
     }).catch((err) => console.log(err))
     .then((result) => {
         if(result) next()
-        else res.send('voucher hasn\'t deleted')
+        else res.json('voucher hasn\'t deleted')
     })
 }
 
@@ -78,68 +78,144 @@ const updatevoucher = async (req, res, next) => {
     const { error } = voucherValidation.updateSchema(req.body)
     if (error) return console.log(error)
 
-    const {productId, color, type} = req.body
+    const { id, productId, voucherdiscount, vouchername, voucherstartdate, voucherenddate, voucherstatus, voucherquantity, code } = req.body
 
     // Product Id check
-    await voucher.findOne(
+    await products.findOne(
         {
             where: {
                 id: productId
             }
         }
     ).catch((err) => console.log(err))
-    .then((result1) => {
-        if(!result1) return res.send('product attributes not updated')
+    .then(async (result1) => {
+        if(!result1) return res.json('product id not found')
         else {
-            if(color) {
-                voucher.update(
-                    {
-                        color: color
-                    },
-                    {
-                        where: {
-                            productId: productId
-                        }
-                    }
-                ).catch((err) => console.log(err))
-                .then((result) => {
-                    if(result) next()
-                    else return res.send('product attribute hasn\'t update')
-                })
+            if(id == '' || id == undefined) {
+                return res.json('id is empty')
             }
-            if(type) {
-                voucher.update(
-                    {
-                        type: type
-                    },
-                    {
-                        where: {
-                            productId: productId
+            else {
+                if(voucherdiscount) {
+                    await voucher.update(
+                        {
+                            voucherdiscount: voucherdiscount
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
                         }
-                    }
-                ).catch((err) => console.log(err))
-                .then((result) => {
-                    if(result) next()
-                    else return res.send('product attribute hasn\'t update')
-                })
-            }
-            if(color&&type) {
-                voucher.update(
-                    {
-                        color: color,
-                        type: type
-                    },
-                    {
-                        where: {
-                            productId: productId
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher discount updated')
+                        else return console.log('voucher discount hasn\'t update')
+                    })
+                }
+    
+                if(vouchername) {
+                    await voucher.update(
+                        {
+                            vouchername: vouchername
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
                         }
-                    }
-                ).catch((err) => console.log(err))
-                .then((result) => {
-                    if(result) next()
-                    else return res.send('product attribute hasn\'t update')
-                })
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher name updated')
+                        else return console.log('Voucher name hasn\'t update')
+                    })
+                }
+    
+                if(voucherstartdate && voucherenddate) {
+                    await voucher.update(
+                        {
+                            voucherenddate: voucherenddate
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
+                        }
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher end  date updated')
+                        else return console.log('Voucher end date hasn\'t update')
+                    })
+                }
+    
+                if(voucherstartdate) {
+                    await voucher.update(
+                        {
+                            voucherstartdate: voucherstartdate
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
+                        }
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher start updated')
+                        else return console.log('Voucher start date hasn\'t update')
+                    })
+                }
+    
+                if(voucherquantity) {
+                    await voucher.update(
+                        {
+                            voucherquantity: voucherquantity
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
+                        }
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher quantity updated')
+                        else return console.log('voucher quantity hasn\'t update')
+                    })
+                }
+    
+                if(voucherstatus) {
+                    await voucher.update(
+                        {
+                            voucherstatus: voucherstatus
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
+                        }
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher status updated')
+                        else return console.log('Voucher status hasn\'t update')
+                    })
+                }
+    
+                if(code) {
+                    await voucher.update(
+                        {
+                            code: code
+                        },
+                        {
+                            where: {
+                                id: id
+                            }
+                        }
+                    ).catch((err) => console.log(err))
+                    .then((result) => {
+                        if(result) console.log('Voucher code updated')
+                        else return console.log('Voucher code hasn\'t update')
+                    })
+                }
+                next()
             }
+            
         }
     })
 

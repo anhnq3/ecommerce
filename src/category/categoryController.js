@@ -1,18 +1,18 @@
 const All = (req, res) => {
-    // res.send('Cannot get catergory')
-    res.send('There is no category')
+    // res.json('Cannot get catergory')
+    res.json('There is no category')
 }
 
 const Deletecategory = (req, res) => {
-    res.send('Category deleted')
+    res.json('Category deleted')
 }
 
 const Addcategory = (req, res) => {
-    res.send('Category added success')
+    res.json('Category added success')
 }
 
 const Updatecategory = (req, res) => {
-    res.send('Category updated')
+    res.json('Category updated')
 }
 
 module.exports = {

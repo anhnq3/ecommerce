@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-const handlebars = require('express-handlebars')
 const cookieParser = require('cookie-parser')
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
@@ -29,20 +28,6 @@ const swaggerDocs = swaggerJsDoc(swaggerOption)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 // Products
-
-
-
-// handlebars config
-// app.set('view engine', 'handlebars')
-app.set('view engine', 'hbs')
-
-app.engine('hbs', handlebars({
-    // replace hbs for handlebars
-    extname: 'hbs',
-}))
-
-app.use(express.static('public'))
-app.use(express.static("public/img"));
 
 const db = require('./models')
 

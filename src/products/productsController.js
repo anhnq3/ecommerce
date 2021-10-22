@@ -1,14 +1,14 @@
 const All = (req, res) => {
-    res.send('there is no product')
+    res.json('there is no product')
 }
 
 const Deleteproducts = (req, res) => {
     // res.render('home', { alert: 'Delete successfully'})
-    res.send('Delete success')
+    res.json('Delete success')
 }
 
 const Addproducts = (req, res) => {
-    res.send('products added success')
+    res.json('products added success')
     // res.render('add-product', {alert: 'Product added successful', checkCookie})
 }
 const getAddproducts = (req, res) => {
@@ -16,12 +16,12 @@ const getAddproducts = (req, res) => {
 }
 
 const Updateproducts = (req, res) => {
-    res.send('products updated success')
+    res.json('products updated success')
     // res.render('edit-product', { alert: 'Update successfully'})
 }
 
 const getUpdateproducts = (req, res) => {
-    res.send('failed')
+    res.json('failed')
 }
 
 module.exports = {

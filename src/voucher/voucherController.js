@@ -1,17 +1,17 @@
 const All = (req, res) => {
-    res.send('There is no voucher')
+    res.json('There is no voucher')
 }
 
 const Deletevoucher = (req, res) => {
-    res.send('voucher deleted')
+    res.json('voucher deleted')
 }
 
 const Addvoucher = (req, res) => {
-    res.send('voucher added success')
+    res.json('voucher added success')
 }
 
 const Updatevoucher = (req, res) => {
-    res.send('voucher updated success')
+    res.json('voucher updated success')
 }
 
 module.exports = {

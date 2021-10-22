@@ -11,7 +11,7 @@ router.get('/order', orderMiddleware.all, orderController.All)
 router.post('/order/addorder', orderMiddleware.addorder, orderController.Addorder)
 
 // Delete order
-router.post('/order/deleteorder', orderMiddleware.deleteorder, orderController.Deleteorder)
+router.delete('/order/deleteorder', orderMiddleware.deleteorder, orderController.Deleteorder)
 
 // Update order
 router.post('/order/updateorder', orderMiddleware.updateorder, orderController.Updateorder)

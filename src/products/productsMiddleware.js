@@ -11,7 +11,7 @@ const all = async (req, res, next) => {
         .then((result) => {
             if (result.length > 0) {
                 // return res.render('home', { result, checkCookie })
-                return res.send(result)
+                return res.json(result)
             }
             next()
         })
@@ -32,7 +32,7 @@ const addproducts = async (req, res, next) => {
     }).catch((err) => console.log(err))
         .then(async (result) => {
             if (result.length < 1) {
-                return res.send('categoryId not found')
+                return res.json('categoryId not found')
             }
             else {
                 // products check
@@ -61,7 +61,7 @@ const addproducts = async (req, res, next) => {
                                 .then((result) => {
                                     if (result) next()
                                     else {
-                                        res.send('product hasn\'t added')
+                                        res.json('product hasn\'t added')
                                     }
                                 })
                         }
@@ -83,7 +83,7 @@ const deleteproducts = async (req, res, next) => {
     }).catch((err) => console.log(err))
     if (destroy > 0)
         return next()
-    return res.send('Failed to delete products')
+    return res.json('Failed to delete products')
 }
 
 const updateproducts = async (req, res, next) => {

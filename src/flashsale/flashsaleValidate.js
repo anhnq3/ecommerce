@@ -24,7 +24,7 @@ const deleteSchema = data => {
 
 const updateSchema = data => {
     const schema = Joi.object().keys({
-        flashsalediscount: Joi.string().min(4).max(30), 
+        flashsalediscount: Joi.string().max(30), 
         flashsalename: Joi.string(),
         flashsalestartdate: Joi.date(),
         flashsaleenddate: Joi.date(),

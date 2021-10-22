@@ -6,7 +6,7 @@ const all = async (req, res, next) => {
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
-                return res.send(result)
+                return res.json(result)
             next()
         })
 }
@@ -25,7 +25,7 @@ const deleteflashsale = async (req, res, next) => {
     }).catch((err) => console.log(err))
     if (destroy > 0)
         return next()
-    return res.send('Failed to delete flashsale')
+    return res.json('Failed to delete flashsale')
 }
 
 const addflashsale = async (req, res, next) => {
@@ -35,14 +35,14 @@ const addflashsale = async (req, res, next) => {
 
     const { flashsalename, flashsalediscount, flashsalestartdate, flashsaleenddate, flashsalestatus, flashsalequantity, code } = req.body
     // flashsale check
-    await flashsale.findAll({
+    await flashsale.findOne({
         where: {
             flashsalename: flashsalename
         }
     }).catch((err) => console.log(err))
 
         .then(async (result) => {
-            if (result.length > 0)
+            if (result)
                 return res.json('This flash sale name already in your flashsale')
             else {
                 await flashsale.create({

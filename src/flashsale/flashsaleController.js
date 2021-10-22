@@ -1,17 +1,17 @@
 const All = (req, res) => {
-    res.send('There is no flashsale')
+    res.json('There is no flashsale')
 }
 
 const Deleteflashsale = (req, res) => {
-    res.send('flashsale deleted')
+    res.json('flashsale deleted')
 }
 
 const Addflashsale = (req, res) => {
-    res.send('flashsale added success')
+    res.json('flashsale added success')
 }
 
 const Updateflashsale = (req, res) => {
-    res.send('flashsale updated success')
+    res.json('flashsale updated success')
 }
 
 module.exports = {

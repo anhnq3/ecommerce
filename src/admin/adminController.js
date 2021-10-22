@@ -1,30 +1,30 @@
 const getLogin = (req, res) => {
-    // res.send('This is admin login template')
-    res.render('adminlogin')
+    res.json('This is admin login template')
+    // res.render('adminlogin')
 }
 
 const Login = async (req, res) => {
-    res.send('Password incorrect')   
+    res.json('Password incorrect')   
 }
 
 const Logout = async (req, res) => {
-    res.send('Logout complete')
+    res.json('Logout complete')
 }
 
 const Passchange = async (req, res) => {
-    res.send('Your password has been changed')
+    res.json('Your password has been changed')
 }
 
 const Roleset = async (req, res) => {
-    res.send ('Set role complete')
+    res.json ('Set role complete')
 }
 
 const Addadmin = async (req, res) => {
-    res.send('Adding admin successful')
+    res.json('Adding admin successful')
 }
 
 const Deleteadmin = async(req, res) => {
-    res.send('Delelte successful')
+    res.json('Delelte successful')
 }
 
 module.exports = {

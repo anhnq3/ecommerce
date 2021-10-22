@@ -5,6 +5,7 @@ const { users } = require('../../models')
 const authValidation = require('./authValidation')
 const nodemailer = require('nodemailer')
 const cookieParser = require('cookie-parser')
+const e = require('express')
 
 var sessionId_cookie
 
@@ -19,213 +20,239 @@ const transporter = nodemailer.createTransport({
 
 // Login
 const login = async (req, res, next) => {
-    if (req.cookies.login_user_id)
-        checkCookie = true
-    else checkCookie = false
     const { username, email, phoneNum, password } = req.body
 
     if (username === '' || password === '') {
-        return res.send('username/password is empty')
+        return res.json('username/password is empty')
         // return res.render('login')
     }
-
-    // Joi check
-    const { error } = authValidation.loginSchema(req.body)
-    if (error) return console.log(error)
-
-    // By usermame
-    if (username && password) {
-        const user = await users.findAll({
-            where: {
-                username: username
-            }
-        }).catch(err => res.send(err))
-
-        if (user.length < 1) {
-            return res.send('Incorrect Username and/or Password!')
-            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
-        }
-        const user_password = user[0].password
-        const check = await bcrypt.compare(password, user_password)
-        if (!check) {
-            return res.send('Incorrect Username and/or Password!')
-            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
-        }
-        if (check) {
-            const result = await users.findAll({
+    else {
+        // By usermame
+        if (username && password) {
+            await users.findOne({
                 where: {
                     username: username
                 }
-            }).catch(err => res.send(err))
-            if (result.length > 0) {
-                const user = result[0]
-                const token = jwt.sign(
-                    {
-                        "username": user.username,
-                        "email": user.email,
-                        "adress": user.adress,
-                        "phoneNum": user.phoneNum,
-                        "role": user.role,
-                        "checkVerify": user.checkVerify
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: "1h"
+            }).catch(err => res.json(err))
+                .then(async (finduser) => {
+                    if (finduser) {
+                        const user_password = finduser.password
+                        const check = await bcrypt.compare(password, user_password)
+                        if (!check) {
+                            return res.json('Incorrect Username or Password!')
+                            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
+                        }
+                        if (check) {
+                            await users.findOne({
+                                where: {
+                                    username: username
+                                }
+                            }).catch(err => res.json(err))
+                                .then(async (checked) => {
+                                    if (checked) {
+                                        const user = checked
+                                        const token = jwt.sign(
+                                            {
+                                                "username": user.username,
+                                                "email": user.email,
+                                                "adress": user.adress,
+                                                "phoneNum": user.phoneNum,
+                                                "role": user.role,
+                                                "checkVerify": user.checkVerify
+                                            },
+                                            process.env.JWT_SECRET,
+                                            {
+                                                expiresIn: "1h"
+                                            }
+                                        )
+                                        await session.create({
+                                            userId: user.id,
+                                            jwt: token
+                                        }).catch(err => console.log(err))
+
+                                        await session.findOne({
+                                            where: {
+                                                userId: user.id
+                                            }
+                                        }).catch(err => console.log(err))
+                                            .then((result) => {
+                                                if (result) {
+                                                    sessionId_cookie = result.id
+                                                    // console.log('sessionId_cookie: ', sessionId_cookie)
+                                                    console.log('Remember to logout')
+
+                                                    res.cookie('login_user_id', user.id)
+                                                }
+                                                return res.status(200).json({
+                                                    message: "Auth successful",
+                                                    sessionId: sessionId_cookie,
+                                                    token: token
+                                                })
+                                            })
+                                    }
+                                    else {
+                                        next()
+                                    }
+                                })
+                        }
                     }
-                )
-                await session.create({
-                    userId: user.id,
-                    jwt: token
-                }).catch(err => console.log(err))
-
-                const sessiondb = await session.findAll({
-                    where: {
-                        userId: user.id
+                    else {
+                        return res.json('Incorrect Username or Password!')
+                        // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
                     }
-                }).catch(err => console.log(err))
-
-                sessionId_cookie = sessiondb[0].id
-                console.log('sessionId_cookie: ', sessionId_cookie)
-                console.log('Remember to logout')
-
-                res.cookie('login_user_id', user.id)
-
-                return res.status(200).json({
-                    message: "Auth successful",
-                    token: token
                 })
-                // return res.render('dashboard')
-            }
-            else {
-                next()
-            }
         }
 
-    }
-
-    // By email
-    if (email && password) {
-        const user = await users.findAll({
-            where: {
-                email: email
-            }
-        }).catch(err => res.send(err))
-
-        if (user.length < 1) return res.send('Incorrect email and/or Password!')
-        user_password = user[0].password
-        const check = await bcrypt.compare(password, user_password)
-        if (!check) {
-            return res.send('Incorrect email and/or Password!')
-        }
-        if (check) {
-            const result = await users.findAll({
+        // By email
+        if (email && password) {
+            await users.findOne({
                 where: {
                     email: email
                 }
-            }).catch(err => res.send(err))
-            if (result.length > 0) {
-                const user = result[0]
-                const token = jwt.sign(
-                    {
-                        "username": user.username,
-                        "email": user.email,
-                        "adress": user.adress,
-                        "phoneNum": user.phoneNum,
-                        "role": user.role,
-                        "checkVerify": user.checkVerify
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: "1h"
+            }).catch(err => res.json(err))
+                .then(async (finduser) => {
+                    if (finduser) {
+                        const user_password = finduser.password
+                        const check = await bcrypt.compare(password, user_password)
+                        if (!check) {
+                            return res.json('Incorrect Email or Password!')
+                            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
+                        }
+                        if (check) {
+                            await users.findOne({
+                                where: {
+                                    email: email
+                                }
+                            }).catch(err => res.json(err))
+                                .then(async (checked) => {
+                                    if (checked) {
+                                        const user = checked
+                                        const token = jwt.sign(
+                                            {
+                                                "username": user.username,
+                                                "email": user.email,
+                                                "adress": user.adress,
+                                                "phoneNum": user.phoneNum,
+                                                "role": user.role,
+                                                "checkVerify": user.checkVerify
+                                            },
+                                            process.env.JWT_SECRET,
+                                            {
+                                                expiresIn: "1h"
+                                            }
+                                        )
+                                        await session.create({
+                                            userId: user.id,
+                                            jwt: token
+                                        }).catch(err => console.log(err))
+
+                                        await session.findOne({
+                                            where: {
+                                                userId: user.id
+                                            }
+                                        }).catch(err => console.log(err))
+                                            .then((result) => {
+                                                if (result) {
+                                                    sessionId_cookie = result.id
+                                                    // console.log('sessionId_cookie: ', sessionId_cookie)
+                                                    console.log('Remember to logout')
+
+                                                    res.cookie('login_user_id', user.id)
+                                                }
+                                                return res.status(200).json({
+                                                    message: "Auth successful",
+                                                    sessionId: sessionId_cookie,
+                                                    token: token
+                                                })
+                                            })
+                                    }
+                                    else {
+                                        next()
+                                    }
+                                })
+                        }
                     }
-                )
-                await session.create({
-                    userId: user.id,
-                    jwt: token
-                }).catch(err => console.log(err))
-
-                const sessiondb = await session.findAll({
-                    where: {
-                        userId: user.id
+                    else {
+                        return res.json('Incorrect Username or Password!')
+                        // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
                     }
-                }).catch(err => console.log(err))
-
-                // sessionId_cookie = sessiondb[0].id
-                // console.log('sessionId_cookie: ', sessionId_cookie)
-                // console.log('Remember to logout')
-
-                return res.status(200).json({
-                    message: "Auth successful",
-                    token: token
                 })
-                next()
-            }
-            else {
-                return res.send('Incorrect Username and/or Password!');
-            }
         }
-    }
 
-    // By phonenum
-    if (phoneNum && password) {
-        const user = await users.findAll({
-            where: {
-                phoneNum: phoneNum
-            }
-        }).catch(err => res.send(err))
-
-        if (user.length < 1) return res.send('Incorrect phoneNum and/or Password!')
-        user_password = user[0].password
-        const check = await bcrypt.compare(password, user_password)
-        if (!check) {
-            return res.send('Incorrect phoneNum and/or Password!')
-        }
-        if (check) {
-            const result = await users.findAll({
+        // By phonenum
+        if (phoneNum && password) {
+            await users.findOne({
                 where: {
                     phoneNum: phoneNum
                 }
-            }).catch(err => res.send(err))
-            if (result.length > 0) {
-                const user = result[0]
-                const token = jwt.sign(
-                    {
-                        "username": user.username,
-                        "email": user.email,
-                        "adress": user.adress,
-                        "phoneNum": user.phoneNum,
-                        "role": user.role,
-                        "checkVerify": user.checkVerify
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: "1h"
+            }).catch(err => res.json(err))
+                .then(async (finduser) => {
+                    if (finduser) {
+                        const user_password = finduser.password
+                        const check = await bcrypt.compare(password, user_password)
+                        if (!check) {
+                            return res.json('Incorrect phone number or Password!')
+                            // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
+                        }
+                        if (check) {
+                            await users.findOne({
+                                where: {
+                                    phoneNum: phoneNum
+                                }
+                            }).catch(err => res.json(err))
+                                .then(async (checked) => {
+                                    if (checked) {
+                                        const user = checked
+                                        const token = jwt.sign(
+                                            {
+                                                "username": user.username,
+                                                "email": user.email,
+                                                "adress": user.adress,
+                                                "phoneNum": user.phoneNum,
+                                                "role": user.role,
+                                                "checkVerify": user.checkVerify
+                                            },
+                                            process.env.JWT_SECRET,
+                                            {
+                                                expiresIn: "1h"
+                                            }
+                                        )
+                                        await session.create({
+                                            userId: user.id,
+                                            jwt: token
+                                        }).catch(err => console.log(err))
+
+                                        await session.findOne({
+                                            where: {
+                                                userId: user.id
+                                            }
+                                        }).catch(err => console.log(err))
+                                            .then((result) => {
+                                                if (result) {
+                                                    sessionId_cookie = result.id
+                                                    // console.log('sessionId_cookie: ', sessionId_cookie)
+                                                    console.log('Remember to logout')
+
+                                                    res.cookie('login_user_id', user.id)
+                                                }
+                                                return res.status(200).json({
+                                                    message: "Auth successful",
+                                                    sessionId: sessionId_cookie,
+                                                    token: token
+                                                })
+                                            })
+                                    }
+                                    else {
+                                        next()
+                                    }
+                                })
+                        }
                     }
-                )
-                await session.create({
-                    userId: user.id,
-                    jwt: token
-                }).catch(err => console.log(err))
-
-                const sessiondb = await session.findAll({
-                    where: {
-                        userId: user.id
+                    else {
+                        return res.json('Incorrect Username or Password!')
+                        // return res.render('login', { alert: 'You have enter the worng user or password please re-enter' })
                     }
-                }).catch(err => console.log(err))
-
-                sessionId_cookie = sessiondb[0].id
-                console.log('sessionId_cookie: ', sessionId_cookie)
-                console.log('Remember to logout')
-
-                return res.status(200).json({
-                    message: "Auth successful",
-                    token: token
                 })
-                next()
-            }
-            else {
-                return res.send('Incorrect Username and/or Password!');
-            }
         }
     }
 }
@@ -236,7 +263,7 @@ const register = async (req, res, next) => {
     const { error } = authValidation.registerSchema(req.body)
     if (error) {
         console.log(error)
-        return res.send('Validate failed')
+        return res.json('Validate failed')
     }
     else {
         const { name, username, email, phoneNum, password, adress, role, checkVerify } = req.body
@@ -250,7 +277,7 @@ const register = async (req, res, next) => {
             }).catch(err => console.log(err))
 
             if (registfind.length > 0) {
-                return res.send('This username has been registed')
+                return res.json('This username has been registed')
             }
             else {
                 const salt = await bcrypt.genSalt(10)
@@ -282,7 +309,7 @@ const register = async (req, res, next) => {
                 }
             }).catch(err => console.log(err))
 
-            if (registfind.length > 0) return res.send('This email has been registed')
+            if (registfind.length > 0) return res.json('This email has been registed')
             else {
                 const salt = await bcrypt.genSalt(10)
                 const hashedPassword = await bcrypt.hash(password, salt)
@@ -308,7 +335,7 @@ const register = async (req, res, next) => {
                 }
             }).catch(err => console.log(err))
 
-            if (phoneNumFind.length > 0) return res.send('This phone number has been registed')
+            if (phoneNumFind.length > 0) return res.json('This phone number has been registed')
             else {
                 const salt = await bcrypt.genSalt(10)
                 const hashedPassword = await bcrypt.hash(password, salt)
@@ -357,15 +384,19 @@ const register = async (req, res, next) => {
 async function logout(req, res, next) {
     if (req.cookies.login_user_id) {
         // const detroy = await session.destroy({ where: { id: sessionId_cookie } }).catch((err) => console.log(err))
-        // const detroy = await session.destroy({ where: { userId:req.cookies.login_user_id } }).catch((err) => console.log(err))
-        const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
-        if (detroy < 1)
-            return res.send('You are already logged out')
-        res.clearCookie('login_user_id');
-        next()
+        // const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
+        await session.destroy({ where: { userId: req.cookies.login_user_id } }).catch((err) => console.log(err))
+            .then((result) => {
+                if (result) {
+                    res.clearCookie('login_user_id');
+                    next()
+                }
+                else
+                    return res.json('You are already logged out')
+            })
     }
     else {
-        res.send('You hasn\'t login yet')
+        res.json('You hasn\'t login yet')
     }
 
 }
@@ -380,7 +411,7 @@ const verify = async (req, res, next) => {
             {
                 where: { id: req.query.id }
             }).catch((err) => console.log(err))
-        if (update_checkVerify.length > 0) res.send('Update success')
+        if (update_checkVerify.length > 0) res.json('Update success')
         else
 
             next()
@@ -402,7 +433,7 @@ const forgotpassword = async (req, res, next) => {
     }).catch((err) => console.log(err))
         .then((user) => forgotid = user[0].id)
 
-    if (forgot.length < 1) return res.send('Email doesn\'t exists!')
+    if (forgot.length < 1) return res.json('Email doesn\'t exists!')
     // Email detail
     var mailOption = {
         from: 'quanganh',
@@ -438,7 +469,7 @@ const resetpassword = async (req, res, next) => {
                     id: req.query.resetpassword
                 }
             }).catch((err) => console.log(err))
-        if (resetpassword.length < 1) return res.send('Fail please try again later')
+        if (resetpassword.length < 1) return res.json('Fail please try again later')
         next()
     }
     else return res.json('error')
@@ -465,11 +496,11 @@ const update = async (req, res, next) => {
                     }
                 }
             ).catch((err) => console.log(err))
-            .then((result) => {
-                if(result[0] === 1) {
-                    console.log('Name updated');
-                }
-            })
+                .then((result) => {
+                    if (result[0] === 1) {
+                        console.log('Name updated');
+                    }
+                })
             // next()
         }
 
@@ -485,11 +516,11 @@ const update = async (req, res, next) => {
                     }
                 }
             ).catch((err) => console.log(err))
-            .then((result1) => {
-                if(result1[0] === 1) {
-                    console.log('Email updated');
-                }
-            })
+                .then((result1) => {
+                    if (result1[0] === 1) {
+                        console.log('Email updated');
+                    }
+                })
             // next()
         }
 
@@ -505,12 +536,11 @@ const update = async (req, res, next) => {
                     }
                 }
             ).catch((err) => console.log(err))
-            .then((result2) => {
-                if(result2[0] === 1)
-                {
-                    console.log('Address updated')
-                }
-            })
+                .then((result2) => {
+                    if (result2[0] === 1) {
+                        console.log('Address updated')
+                    }
+                })
             // next()
         }
 
@@ -526,11 +556,11 @@ const update = async (req, res, next) => {
                     }
                 }
             ).catch((err) => console.log(err))
-            .then((result3) => {
-                if(result3[0] === 1) {
-                    console.log('Phone number updated');
-                }
-            })
+                .then((result3) => {
+                    if (result3[0] === 1) {
+                        console.log('Phone number updated');
+                    }
+                })
             // next()
         }
 
@@ -549,7 +579,7 @@ const update = async (req, res, next) => {
                     }
                 }).catch((err) => console.log(err))
                 .then((result4) => {
-                    if(result4[0] === 1) {
+                    if (result4[0] === 1) {
                         console.log('Password updated');
                     }
                 })
