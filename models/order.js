@@ -24,14 +24,17 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         orderquantity: {
-            type: DataTypes.INTEGER(),
+            type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
+        vouchercode: {
+            type: DataTypes.STRING
+        },
         ordertotalprice: {
-            type: DataTypes.INTEGER(),
+            type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
                 notEmpty: true

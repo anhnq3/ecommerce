@@ -11,9 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         flashsaleId: {
             type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: true
-            }
         },
         userId: {
             type: DataTypes.INTEGER,
@@ -24,6 +21,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         orderId: {
             type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: true
+            }
+        },
+        total: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
             validate: {
                 notEmpty: true
             }

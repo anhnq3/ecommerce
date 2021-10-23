@@ -1,4 +1,4 @@
-const { order, products } = require('../../models')
+const { order, products, voucher } = require('../../models')
 const orderValidation = require('./orderValidate')
 
 const all = async (req, res, next) => {
@@ -31,33 +31,33 @@ const addorder = async (req, res, next) => {
             if (result) {
                 await order.findOne(
                     {
-                    where: {
-                        productId: productId
-                    }
-                }).catch((err) => console.log(err))
-                .then(async (result1) => {
-                    const productFind = await products.findOne(
-                        {
-                            where: {
-                                id: productId
-                            }
-                        }).catch((err1) => console.log(err1))
-    
-                    const ordertotalprice = productFind.sellingprice * orderquantity
+                        where: {
+                            productId: productId
+                        }
+                    }).catch((err) => console.log(err))
+                    .then(async (result1) => {
+                        const productFind = await products.findOne(
+                            {
+                                where: {
+                                    id: productId
+                                }
+                            }).catch((err1) => console.log(err1))
 
-                    const quantity = orderquantity + result1.orderquantity
-                    const total = result1.ordertotalprice + ordertotalprice 
-                    await order.update(
-                        {
-                            orderquantity: quantity,
-                            ordertotalprice: total
-                        }
-                        ,{
-                            where: {productId: productId}
-                        }
-                    )
-                    next()
-                })
+                        const ordertotalprice = productFind.sellingprice * orderquantity
+
+                        const quantity = orderquantity + result1.orderquantity
+                        const total = result1.ordertotalprice + ordertotalprice
+                        await order.update(
+                            {
+                                orderquantity: quantity,
+                                ordertotalprice: total
+                            }
+                            , {
+                                where: { productId: productId }
+                            }
+                        )
+                        next()
+                    })
             }
             else {
                 // order total price
@@ -69,7 +69,7 @@ const addorder = async (req, res, next) => {
                     }).catch((err1) => console.log(err1))
 
                     .then(async (result1) => {
-                        if(result1) {
+                        if (result1) {
                             const ordertotalprice = result1.sellingprice * orderquantity
 
                             await order.create(
@@ -80,7 +80,7 @@ const addorder = async (req, res, next) => {
                                     ordertotalprice: ordertotalprice
                                 }
                             ).catch((err) => console.log(err))
-                            
+
                             next()
                         }
                         else {
@@ -103,6 +103,7 @@ const deleteorder = async (req, res, next) => {
 
 const updateorder = async (req, res, next) => {
     const { productId, orderquantity } = req.body
+
     await order.update(
         {
             orderquantity: orderquantity,
@@ -113,44 +114,125 @@ const updateorder = async (req, res, next) => {
             }
         }
     ).catch((err) => console.log(err))
-    .then(async (result) => {
-        if(result[0] != 0) 
-        {
-            
-            // Get price from product where product id updated
-            await products.findOne(
-                {
-                    where: {
-                        id: productId
-                    }
-                }
-            ).catch((err) => console.log(err))
-            .then(async (result1) => {
-                // Calculate update total
-                const total_updated = result1.sellingprice* orderquantity
-                
-                // Update total from order update
-                await order.update(
-                    {
-                        ordertotalprice: total_updated
-                    },
+        .then(async (result) => {
+            if (result[0] != 0) {
+                // Get price from product where product id updated
+                await products.findOne(
                     {
                         where: {
-                            productId: productId
+                            id: productId
                         }
                     }
                 ).catch((err) => console.log(err))
-            })
-            
-            next()
-        }
-        else return res.send('Product hasn\'t add')
-    })
+                    .then(async (result1) => {
+                        // Calculate update total
+                        const total_updated = result1.sellingprice * orderquantity
+
+                        // Update total from order update
+                        await order.update(
+                            {
+                                ordertotalprice: total_updated
+                            },
+                            {
+                                where: {
+                                    productId: productId
+                                }
+                            }
+                        ).catch((err) => console.log(err))
+                    })
+
+            }
+            // else return res.send('Product hasn\'t add')
+        })
+    next()
+
+}
+
+const addvoucher = async (req, res, next) => {
+    // This only update voucher code after they done with product
+    const { productId, vouchercode } = req.body
+
+    var voucher_discount
+    // get voucher discount
+    await voucher.findOne(
+        {
+            where: {
+                code: vouchercode
+            }
+        }).then(async (result) => {
+            var total = 0
+            if (result) {
+                voucher_discount = result.voucherdiscount
+                await order.findOne({
+                    where: {
+                        productId: productId
+                    }
+                }).then(async (result1) => {
+                    // get total price
+                    total = result1.ordertotalprice
+                    // calculate total price after add voucher
+                    // update total price
+                    var final_total = total * (100 - voucher_discount) / 100
+                    await order.update({
+                        ordertotalprice: final_total
+                    },
+                        {
+                            where: {
+                                productId: productId
+                            }
+                        })
+                })
+                next()
+            }
+            else res.json('Voucher code not exsist')
+        })
+}
+
+const deletevoucher = async (req, res, next) => {
+    // This only update voucher code after they done with product
+    const { productId, vouchercode } = req.body
+
+    var voucher_discount
+    // get voucher discount
+    await voucher.findOne(
+        {
+            where: {
+                code: vouchercode
+            }
+        }).then(async (result) => {
+            var total = 0
+            if (result) {
+                voucher_discount = result.voucherdiscount
+                await order.findOne({
+                    where: {
+                        productId: productId
+                    }
+                }).then(async (result1) => {
+                    // get total price
+                    total = result1.ordertotalprice
+                    // calculate total price after add voucher
+                    // update total price
+                    var final_total = total / (100 - voucher_discount) * 100
+                    await order.update({
+                        ordertotalprice: final_total
+                    },
+                        {
+                            where: {
+                                productId: productId
+                            }
+                        })
+                })
+                next()
+            }
+            else res.json('Voucher code not exsist')
+        })
 }
 
 module.exports = {
     all,
     addorder,
     deleteorder,
-    updateorder
+    updateorder,
+    addvoucher,
+    deletevoucher
 }

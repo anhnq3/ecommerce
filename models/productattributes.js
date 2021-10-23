@@ -16,14 +16,14 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         color: {
-            type: DataTypes.STRING(),
+            type: DataTypes.STRING,
             allowNull: true,
             validate: {
                 notEmpty: true
             }
         },
         type: {
-            type: DataTypes.STRING(),
+            type: DataTypes.STRING,
             allowNull: true,
             validate: {
                 notEmpty: true

@@ -16,5 +16,11 @@ router.delete('/order/deleteorder', orderMiddleware.deleteorder, orderController
 // Update order
 router.post('/order/updateorder', orderMiddleware.updateorder, orderController.Updateorder)
 
+// Add voucher
+router.post('/order/addvoucher', orderMiddleware.addvoucher, orderController.Addvoucher)
+
+// Delete voucher
+router.post('/order/deletevoucher', orderMiddleware.deletevoucher, orderController.Deletevoucher)
+
 
 module.exports = router

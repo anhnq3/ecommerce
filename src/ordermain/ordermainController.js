@@ -3,7 +3,7 @@ const All = (req, res) => {
 }
 
 const Addordermain = (req, res) => {
-    res.json('ordermain added success')
+    res.json('There is no flash sale code like that')
 }
 
 module.exports = {

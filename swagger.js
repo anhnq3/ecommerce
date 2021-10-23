@@ -737,6 +737,45 @@
      *        decription: insert order quantity
      *        in: formData
      *        type: integer
+     * 
+     *      responses:
+     *          200:
+     *              description: success
+     * 
+     * /order/addvoucher:
+     *  post:
+     *      tags: [Order]
+     *      description: Add a voucher after they end order
+     *      parameters:
+     *      - name: productId
+     *        description: Insert your product Id
+     *        in: formData
+     *        type: integer
+     * 
+     *      - name: vouchercode
+     *        description: Insert your vouchercode
+     *        in: formData
+     *        type: string
+     * 
+     *      responses:
+     *          200:
+     *              description: success
+     * 
+     * /order/deletevoucher:
+     *  post:
+     *      tags: [Order]
+     *      description: Delete voucher added before
+     *      parameters:
+     *      - name: productId
+     *        description: Insert your product Id
+     *        in: formData
+     *        type: integer
+     * 
+     *      - name: vouchercode
+     *        description: Insert your vouchercode
+     *        in: formData
+     *        type: string
+     * 
      *      responses:
      *          200:
      *              description: success
@@ -758,22 +797,16 @@
      *          200:
      *              description: success
      * 
-     * /addordermain:
+     * /ordermain/addordermain:
      *  post:
      *      tags: [Order main]
      *      description: Add an ordermain
      *      parameters:
-     *      - name: userId
-     *        description: 
-     *        in: formData
-     *        type: integer
-     *        required: true
      * 
-     *      - name: flashsaleId
+     *      - name: flashsaleCode
      *        description: 
      *        in: formData
-     *        type: integer
-     *        required: true 
+     *        type: string
      *      responses:
      *          200:
      *              description: success
