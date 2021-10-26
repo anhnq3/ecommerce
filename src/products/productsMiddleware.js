@@ -1,4 +1,4 @@
-const { products, category } = require('../../models')
+const { products, category, order } = require('../../models')
 const productsValidation = require('./productsValidate')
 
 var checkCookie = false
@@ -75,15 +75,29 @@ const deleteproducts = async (req, res, next) => {
     const { error } = productsValidation.deleteSchema(req.params)
     if (error) return console.log(error)
 
-
-    const destroy = await products.destroy({
+    await order.findOne({
         where: {
-            id: req.params.id
+            productId: req.params.id
         }
-    }).catch((err) => console.log(err))
-    if (destroy > 0)
-        return next()
-    return res.json('Failed to delete products')
+    })
+    .then(async (orderfind) => {
+        if(orderfind) {
+            res.json('Order of this product has been made, cannot delete')
+        }
+        else {
+            const destroy = await products.destroy({
+                where: {
+                    id: req.params.id
+                }
+            }).catch((err) => console.log(err))
+            if (destroy > 0)
+                return next()
+            return res.json('Failed to delete products')
+        }
+    })
+    
+
+    
 }
 
 const updateproducts = async (req, res, next) => {
@@ -92,8 +106,10 @@ const updateproducts = async (req, res, next) => {
     if (error) return console.log(error)
 
     const { id, imgs, productname, categoryId, barcode, importprice, sellingprice, weight, mainimg, quantity, description } = req.body
-    
+
     if (id) {
+        // Order check
+        order
         // Update category
         if (categoryId) {
             await products.update(

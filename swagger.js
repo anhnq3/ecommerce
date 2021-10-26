@@ -691,11 +691,7 @@
      *  post:
      *      tags: [Order]
      *      description: Add a new order
-     *      parameters: 
-     *       - name: userId
-     *         description: Insert userId
-     *         in: formData
-     *         type: integer
+     *      parameters:
      * 
      *       - name: productId
      *         description: Insert productId
@@ -710,7 +706,7 @@
      *          200:
      *              description: Success
      * 
-     * /deleteorder:
+     * /order/deleteorder:
      *  delete:
      *      tags: [Order]
      *      description: Delete an order

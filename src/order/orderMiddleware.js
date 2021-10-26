@@ -16,7 +16,7 @@ const addorder = async (req, res, next) => {
     const { error } = orderValidation.createSchema(req.body)
     if (error) return console.log(error)
 
-    const { productId, orderquantity, userId } = req.body
+    const { productId, orderquantity } = req.body
 
     // order check
     // update when the product id exists
@@ -74,7 +74,7 @@ const addorder = async (req, res, next) => {
 
                             await order.create(
                                 {
-                                    userId: userId,
+                                    userId: req.cookies.login_user_id,
                                     productId: productId,
                                     orderquantity: orderquantity,
                                     ordertotalprice: ordertotalprice

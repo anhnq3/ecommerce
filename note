@@ -34,3 +34,8 @@ Catergory.hasMany(models.products, {
     onDelete: "cascade"
   })
 }
+
+jwt.verify(token, 'wrong-secret', function(err, decoded) {
+  // err
+  // decoded undefined
+});
