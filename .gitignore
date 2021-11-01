@@ -108,4 +108,5 @@ node_modules
 .env
 note*
 done*
+.vscode
 >>>>>>> 86ad2bd (First commit)
