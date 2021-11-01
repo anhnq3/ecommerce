@@ -1,4 +1,4 @@
-const { ordermain, order, flashsale } = require('../../models')
+const { ordermain, order, flashsale } = require('../models')
 const ordermainValidation = require('./ordermainValidate')
 
 const all = async (req, res, next) => {

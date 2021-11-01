@@ -1,4 +1,4 @@
-const { products, category, order } = require('../../models')
+const { products, category, order } = require('../models')
 const productsValidation = require('./productsValidate')
 
 var checkCookie = false

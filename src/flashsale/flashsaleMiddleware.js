@@ -1,4 +1,4 @@
-const { flashsale } = require('../../models')
+const { flashsale } = require('../models')
 const flashsaleValidation = require('./flashsaleValidate')
 
 const all = async (req, res, next) => {

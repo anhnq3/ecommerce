@@ -1,4 +1,4 @@
-const { order, products, voucher } = require('../../models')
+const { order, products, voucher } = require('../models')
 const orderValidation = require('./orderValidate')
 
 const all = async (req, res, next) => {

@@ -29,7 +29,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 // Products
 
-const db = require('./models')
+const db = require('./src/models')
 
 // Auth Router
 const authRouter = require('./src/auth/authAPI')

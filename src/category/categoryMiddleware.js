@@ -1,4 +1,4 @@
-const { category } = require('../../models')
+const { category } = require('../models')
 const adminValidation = require('./categoryValidate')
 
 const all = async (req, res, next) => {

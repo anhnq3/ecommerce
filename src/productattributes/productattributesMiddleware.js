@@ -1,4 +1,4 @@
-const { productattributes, products } = require('../../models')
+const { productattributes, products } = require('../models')
 const productattributesValidation = require('./productattributesValidate')
 
 const all = async (req, res, next) => {

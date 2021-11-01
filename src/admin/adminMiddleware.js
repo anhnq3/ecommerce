@@ -1,5 +1,4 @@
-const { admins } = require('../../models')
-
+const { admins } = require('../models')
 
 const adminValidation = require('./adminValidation')
 const bcrypt = require('bcrypt')

@@ -1,5 +1,5 @@
 const e = require('express')
-const { voucher, products } = require('../../models')
+const { voucher, products } = require('../models')
 const voucherValidation = require('./voucherValidate')
 
 const all = async (req, res, next) => {
