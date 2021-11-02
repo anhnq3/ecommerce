@@ -7,7 +7,7 @@ const all = async (req, res, next) => {
         .then((result) => {
             if (result.length > 0)
                 return res.json(result)
-            next()
+            return res.json('There is no flashsale')
         })
 }
 
@@ -24,7 +24,7 @@ const deleteflashsale = async (req, res, next) => {
         }
     }).catch((err) => console.log(err))
     if (destroy > 0)
-        return next()
+        return res.json('flashsale deleted')
     return res.json('Failed to delete flashsale')
 }
 
@@ -54,7 +54,7 @@ const addflashsale = async (req, res, next) => {
                     flashsalequantity: flashsalequantity,
                     code: code
                 }).catch((err) => console.log(err))
-                next()
+                return res.json('flashsale added success')
             }
         })
 }
@@ -80,7 +80,7 @@ const updateflashsale = async (req, res, next) => {
                         return res.json('Update failed')
                     }
                     else {
-                        next()
+                        return res.json('flashsale updated success')
                     }
                 })
         }

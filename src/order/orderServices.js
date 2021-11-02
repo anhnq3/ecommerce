@@ -1,17 +1,18 @@
 const { order, products, voucher } = require('../models')
 const orderValidation = require('./orderValidate')
 
-const all = async (req, res, next) => {
+const all = async (req, res) => {
     await order.findAll()
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
                 return res.send(result)
-            next()
+                return res.json('There is no order')
+                
         })
 }
 
-const addorder = async (req, res, next) => {
+const addorder = async (req, res) => {
     // Joi check
     const { error } = orderValidation.createSchema(req.body)
     if (error) return console.log(error)
@@ -91,17 +92,18 @@ const addorder = async (req, res, next) => {
         })
 }
 
-const deleteorder = async (req, res, next) => {
+const deleteorder = async (req, res) => {
     const destroy = await order.destroy({
         where: {
             productId: req.body.productId
         }
     }).catch((err) => console.log(err))
     if (destroy < 1) return res.send('Product Id in order no found')
-    else next()
+    else     res.json('order deleted')
+
 }
 
-const updateorder = async (req, res, next) => {
+const updateorder = async (req, res) => {
     const { productId, orderquantity } = req.body
 
     await order.update(
@@ -144,11 +146,12 @@ const updateorder = async (req, res, next) => {
             }
             // else return res.send('Product hasn\'t add')
         })
-    next()
+        return res.json('order updated success')
+
 
 }
 
-const addvoucher = async (req, res, next) => {
+const addvoucher = async (req, res) => {
     // This only update voucher code after they done with product
     const { productId, vouchercode } = req.body
 
@@ -182,13 +185,13 @@ const addvoucher = async (req, res, next) => {
                             }
                         })
                 })
-                next()
+                res.json('order added success')
             }
             else res.json('Voucher code not exsist')
         })
 }
 
-const deletevoucher = async (req, res, next) => {
+const deletevoucher = async (req, res) => {
     // This only update voucher code after they done with product
     const { productId, vouchercode } = req.body
 
@@ -222,7 +225,7 @@ const deletevoucher = async (req, res, next) => {
                             }
                         })
                 })
-                next()
+                res.json('voucher deleted')
             }
             else res.json('Voucher code not exsist')
         })

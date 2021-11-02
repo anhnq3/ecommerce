@@ -1,9 +1,10 @@
+const e = require('express')
 const { products, category, order } = require('../models')
 const productsValidation = require('./productsValidate')
 
 var checkCookie = false
 
-const all = async (req, res, next) => {
+const all = async (req, res) => {
     if(req.cookies.login_user_id) checkCookie = true
     else checkCookie = false
     await products.findAll({ raw: true })
@@ -12,12 +13,15 @@ const all = async (req, res, next) => {
             if (result.length > 0) {
                 // return res.render('home', { result, checkCookie })
                 return res.json(result)
+                // console.log(result)
             }
-            next()
+            else {
+                return res.json('No products has found')
+            }
         })
 }
 
-const addproducts = async (req, res, next) => {
+const addproducts = async (req, res) => {
     // Joi check
     const { error } = productsValidation.createSchema(req.body)
     if (error) return console.log(error)
@@ -36,14 +40,14 @@ const addproducts = async (req, res, next) => {
             }
             else {
                 // products check
-                await products.findAll({
+                await products.findOne({
                     where: {
                         productname: productname,
                     }
                 }).catch((err) => console.log(err))
 
                     .then(async (result) => {
-                        if (result.length > 0)
+                        if (result)
                             return res.json('This product name already in your products')
                         else {
                             await products.create({
@@ -59,7 +63,8 @@ const addproducts = async (req, res, next) => {
                                 description: description
                             }).catch((err) => console.log(err))
                                 .then((result) => {
-                                    if (result) next()
+                                    if (result)     
+                                        res.json('products added success')
                                     else {
                                         res.json('product hasn\'t added')
                                     }
@@ -70,7 +75,7 @@ const addproducts = async (req, res, next) => {
         })
 }
 
-const deleteproducts = async (req, res, next) => {
+const deleteproducts = async (req, res) => {
     // Joi check
     const { error } = productsValidation.deleteSchema(req.params)
     if (error) return console.log(error)
@@ -85,22 +90,24 @@ const deleteproducts = async (req, res, next) => {
             res.json('Order of this product has been made, cannot delete')
         }
         else {
-            const destroy = await products.destroy({
+            await products.destroy({
                 where: {
                     id: req.params.id
                 }
             }).catch((err) => console.log(err))
-            if (destroy > 0)
-                return next()
-            return res.json('Failed to delete products')
+            .then((result) => {
+                if(result) {
+                    return res.json('Delete success')
+                }
+                else {
+                    return res.json('Failed to delete products')
+                }
+            })
         }
     })
-    
-
-    
 }
 
-const updateproducts = async (req, res, next) => {
+const updateproducts = async (req, res) => {
     // Joi check
     const { error } = productsValidation.updateSchema(req.body)
     if (error) return console.log(error)
@@ -123,9 +130,8 @@ const updateproducts = async (req, res, next) => {
                     }
                 }).catch((err) => console.log(err))
                 .then((result) => {
-                    console.log(result)
-                    if (result[0] != 0) {
-                        next()
+                    if (result) {
+                        res.json('products updated success')
                     }
                     else {
                         return res.json('Update failed')

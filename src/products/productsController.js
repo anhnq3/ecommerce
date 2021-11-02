@@ -1,24 +1,26 @@
+const productsServices = require('./productsServices')
+
 const All = (req, res) => {
-    res.json('there is no product')
+    productsServices.all(req, res)
 }
 
 const Deleteproducts = (req, res) => {
-    res.json('Delete success')
+    productsServices.deleteproducts(req,res)
 }
 
 const Addproducts = (req, res) => {
-    res.json('products added success')
+    productsServices.addproducts(req, res)
 }
 const getAddproducts = (req, res) => {
-    res.render('add-product')
+    // res.render('add-product')
 }
 
 const Updateproducts = (req, res) => {
-    res.json('products updated success')
+    productsServices.updateproducts(req, res)
 }
 
 const getUpdateproducts = (req, res) => {
-    res.json('failed')
+    // res.json('failed')
 }
 
 module.exports = {

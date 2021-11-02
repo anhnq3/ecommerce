@@ -1,20 +1,19 @@
 const express = require('express')
 const router = express()
 
-const productattributesMiddleware = require('./productattributesMiddleware')
 const productattributesController = require('./productattributesController')
 
 // Show productattributes
-router.get('/productattributes', productattributesMiddleware.all, productattributesController.All)
+router.get('/productattributes', productattributesController.All)
 
 // Add productattributes
-router.post('/productattributes/addproductattributes', productattributesMiddleware.addproductattributes, productattributesController.Addproductattributes)
+router.post('/productattributes/addproductattributes', productattributesController.Addproductattributes)
 
 // Delete productattributes
-router.delete('/productattributes/deleteproductattributes', productattributesMiddleware.deleteproductattributes, productattributesController.Deleteproductattributes)
+router.delete('/productattributes/deleteproductattributes', productattributesController.Deleteproductattributes)
 
 // Update productattributes
-router.post('/productattributes/updateproductattributes', productattributesMiddleware.updateproductattributes, productattributesController.Updateproductattributes)
+router.post('/productattributes/updateproductattributes', productattributesController.Updateproductattributes)
 
 
 module.exports = router

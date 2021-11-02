@@ -1,3 +1,5 @@
+const authServices = require('./authServices')
+
 // Login
 const getLogin = (req,res) => {
     res.json('This is login template')
@@ -5,42 +7,42 @@ const getLogin = (req,res) => {
 const Login = async (req, res) => {
     // const { username, email, phoneNum, password } = req.body
     // res.json(`You are logged in, Welcome ${user.username}`)
-    res.json('Incorrect Username and/or Password!')
+    authServices.login(req, res)
 }
 
 // Register
 const Register = async (req, res) => {
-    res.json('Registing done')
+    authServices.register(req, res)
 }
 
 const Verify = async (req, res) => {
-    res.json('Update success')
+    authServices.verify(req, res)
 }
 
 // Forgot password
 const ForgotPassword = async (req, res) => {
-    res.json('An restore password email have been sent to your email')
+    authServices.forgotpassword(req, res)
 }
 
 // Reset password
-const ResetPassword = async(req, res) => {
-    res.json('Password has been reseted')
+const ResetPassword = async (req, res) => {
+    authServices.resetpassword(req, res)
 }
 
 //Update
 const Update = async (req, res) => {
-    res.json('Your accoount has been updated')
+    authServices.update(req, res)
 }
 
 // Logout
 const Logout = async (req, res) => {
-    res.json('Loged out')
+    authServices.login(req, res)
     // res.render('login')
 }
 
 // Delete
 const Deleteuser = async (req, res) => {
-    res.json('Delete account completed')
+    authServices.deleteuser(req, res)
 }
 
 module.exports = {

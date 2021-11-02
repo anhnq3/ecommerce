@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 })
 
 // Login
-const login = async (req, res, next) => {
+const login = async (req, res) => {
     const { username, email, phoneNum, password } = req.body
 
     if (username === '' || password === '') {
@@ -91,7 +91,7 @@ const login = async (req, res, next) => {
                                             })
                                     }
                                     else {
-                                        next()
+                                        return res.json('Incorrect Username and/or Password!')
                                     }
                                 })
                         }
@@ -258,7 +258,7 @@ const login = async (req, res, next) => {
 }
 
 // Register
-const register = async (req, res, next) => {
+const register = async (req, res) => {
     // Joi check
     const { error } = authValidation.registerSchema(req.body)
     if (error) {
@@ -297,7 +297,7 @@ const register = async (req, res, next) => {
                     .then((add) => {
                         emailValidate(add.id)
                     })
-                next()
+                    return res.json('Registing done')
             }
         }
 
@@ -323,7 +323,8 @@ const register = async (req, res, next) => {
                     role: role,
                     checkVerify: checkVerify
                 }).catch(err => console.log(err))
-                next()
+                    return res.json('Registing done')
+                
             }
         }
 
@@ -349,7 +350,7 @@ const register = async (req, res, next) => {
                     role: role,
                     checkVerify: checkVerify
                 }).catch(err => console.log(err))
-                next()
+                return res.json('Registing done')
             }
         }
 
@@ -381,7 +382,7 @@ const register = async (req, res, next) => {
 }
 
 // Logout(delete session)
-async function logout(req, res, next) {
+async function logout(req, res) {
     if (req.cookies.login_user_id) {
         // const detroy = await session.destroy({ where: { id: sessionId_cookie } }).catch((err) => console.log(err))
         // const detroy = await session.destroy({ where: { id: req.body.id } }).catch((err) => console.log(err))
@@ -389,7 +390,7 @@ async function logout(req, res, next) {
             .then((result) => {
                 if (result) {
                     res.clearCookie('login_user_id');
-                    next()
+                    return res.json('Incorrect Username and/or Password!')
                 }
                 else
                     return res.json('You are already logged out')
@@ -398,11 +399,11 @@ async function logout(req, res, next) {
     else {
         res.json('You hasn\'t login yet')
     }
-
+    return res.json('Loged out')
 }
 
 // Verify after receive email
-const verify = async (req, res, next) => {
+const verify = async (req, res) => {
     if (req.query.id) {
         const update_checkVerify = await users.update(
             {
@@ -413,8 +414,7 @@ const verify = async (req, res, next) => {
             }).catch((err) => console.log(err))
         if (update_checkVerify.length > 0) res.json('Update success')
         else
-
-            next()
+            return res.json('Update success')
     }
     else {
         return res.json('error')
@@ -422,7 +422,7 @@ const verify = async (req, res, next) => {
 }
 
 // Forgot password(Get email)
-const forgotpassword = async (req, res, next) => {
+const forgotpassword = async (req, res) => {
     const { email } = req.body
     // console.log('email: ', email)
     var forgotid
@@ -450,11 +450,11 @@ const forgotpassword = async (req, res, next) => {
             console.log('Email restore password has sent')
         }
     })
-    next()
+    return res.json('An restore password email have been sent to your email')
 }
 
 // Reset password (After received email)
-const resetpassword = async (req, res, next) => {
+const resetpassword = async (req, res) => {
     const { password } = req.body
     if (req.query.resetpassword) {
         const salt = await bcrypt.genSalt(10)
@@ -470,13 +470,13 @@ const resetpassword = async (req, res, next) => {
                 }
             }).catch((err) => console.log(err))
         if (resetpassword.length < 1) return res.json('Fail please try again later')
-        next()
+        return res.json('Password has been reseted')
     }
     else return res.json('error')
 }
 
 // Update user account just owned account
-const update = async (req, res, next) => {
+const update = async (req, res) => {
     // Check data
     const { error } = authValidation.updateSchema(req.body)
     if (error) return console.log(error)
@@ -585,18 +585,18 @@ const update = async (req, res, next) => {
                 })
             // next()
         }
-        next()
+        return res.json('Your accoount has been updated')
     }
 
 }
 
 // Delete user account
-const deleteuser = async (req, res, next) => {
+const deleteuser = async (req, res) => {
     try {
         const detroy = await users.destroy({ where: { id: req.params.id } }).catch((err) => console.log(err))
         if (detroy < 1)
             return console.log('User not exsits')
-        next()
+        return res.json('Delete account completed')
     }
     catch (err) {
         return console.log(err)

@@ -1,18 +1,20 @@
+const categoryServices = require('./categoryServices')
+
 const All = (req, res) => {
     // res.json('Cannot get catergory')
-    res.json('There is no category')
+    categoryServices.all(req, res)
 }
 
 const Deletecategory = (req, res) => {
-    res.json('Category deleted')
+    categoryServices.deletecategory(req, res)
 }
 
 const Addcategory = (req, res) => {
-    res.json('Category added success')
+    categoryServices.addcategory(req, res)
 }
 
 const Updatecategory = (req, res) => {
-    res.json('Category updated')
+    categoryServices.updatecategory(req, res)
 }
 
 module.exports = {

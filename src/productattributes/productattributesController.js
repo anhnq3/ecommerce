@@ -1,17 +1,18 @@
+const productattributesServices = require('./productattributesServices')
 const All = (req, res) => {
-    res.json('There is no product attributes')
+    productattributesServices.all(req, res)
 }
 
 const Deleteproductattributes = (req, res) => {
-    res.json('product attributes deleted')
+    productattributesServices.deleteproductattributes(req, res)
 }
 
 const Addproductattributes = (req, res) => {
-    res.json('product attributes added success')
+    productattributesServices.addproductattributes(req, res)
 }
 
 const Updateproductattributes = (req, res) => {
-    res.json('product attributes updated success')
+    productattributesServices.updateproductattributes(req, res)
 }
 
 module.exports = {

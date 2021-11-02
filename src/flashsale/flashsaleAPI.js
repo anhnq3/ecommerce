@@ -1,20 +1,19 @@
 const express = require('express')
 const router = express()
 
-const flashsaleMiddleware = require('./flashsaleMiddleware')
 const flashsaleController = require('./flashsaleController')
 
 // Show flashsale
-router.get('/flashsale', flashsaleMiddleware.all, flashsaleController.All)
+router.get('/flashsale', flashsaleController.All)
 
 // Add flashsale
-router.post('/flashsale/addflashsale', flashsaleMiddleware.addflashsale, flashsaleController.Addflashsale)
+router.post('/flashsale/addflashsale', flashsaleController.Addflashsale)
 
 // Delete flashsale
-router.delete('/flashsale/deleteflashsale', flashsaleMiddleware.deleteflashsale, flashsaleController.Deleteflashsale)
+router.delete('/flashsale/deleteflashsale', flashsaleController.Deleteflashsale)
 
 // Update flashsale
-router.post('/flashsale/update', flashsaleMiddleware.updateflashsale, flashsaleController.Updateflashsale)
+router.post('/flashsale/update', flashsaleController.Updateflashsale)
 
 
 module.exports = router

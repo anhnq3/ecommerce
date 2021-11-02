@@ -1,9 +1,11 @@
+const ordermainService = require('./ordermainServices')
+
 const All = (req, res) => {
-    res.json('There is no ordermain')
+    ordermainService.all(req, res)
 }
 
 const Addordermain = (req, res) => {
-    res.json('There is no flash sale code like that')
+    ordermainService.addordermain(req, res)
 }
 
 module.exports = {

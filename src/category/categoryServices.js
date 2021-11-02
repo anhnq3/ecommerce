@@ -7,7 +7,7 @@ const all = async (req, res, next) => {
         .then((result) => {
             if (result.length > 0)
                 return res.json(result)
-            next()
+            return res.json('There is no category')
         })
 }
 
@@ -24,7 +24,7 @@ const deletecategory = async (req, res, next) => {
         }
     }).catch((err) => console.log(err))
     if (destroy > 0)
-        return next()
+        return res.json('Category deleted')
     return res.json('Failed to delete category')
 }
 
@@ -50,7 +50,7 @@ const addcategory = async (req, res, next) => {
                 categoryicon: categoryicon
             }).catch((err) => console.log(err))
             .then((result) => {
-                if(result) next()
+                if(result) return res.json('Category added success')
                 else return res.json('category hasn\'t added')
             })
         }
@@ -99,7 +99,7 @@ const updatecategory = async (req, res, next) => {
                             }
                     }).catch((err) => console.log(err))
                     
-                    next()
+                    return res.json('Category updated')
                 }
             })
         } 

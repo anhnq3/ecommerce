@@ -1,18 +1,18 @@
-const e = require('express')
 const { voucher, products } = require('../models')
 const voucherValidation = require('./voucherValidate')
 
-const all = async (req, res, next) => {
+const all = async (req, res) => {
     await voucher.findAll()
         .catch((err) => console.log(err))
         .then((result) => {
             if (result.length > 0)
                 return res.json(result)
-            next()
+                return res.json('There is no voucher')
+
         }).catch((err) => console.log(err))
 }
 
-const addvoucher = async (req, res, next) => {
+const addvoucher = async (req, res) => {
     // Joi check
     const { error } = voucherValidation.createSchema(req.body)
     if (error) return console.log(error)
@@ -43,7 +43,7 @@ const addvoucher = async (req, res, next) => {
             ).catch((err) => console.log(err))
             .then((result1) => {
                 if(result1) {
-                    next()
+                    res.json('voucher added success')
                 }
                 else {
                     return res.json('voucher hasn\'t added')
@@ -68,7 +68,9 @@ const deletevoucher = async (req, res, next) => {
         }
     }).catch((err) => console.log(err))
     .then((result) => {
-        if(result) next()
+        if(result)     
+    res.json('voucher deleted')
+
         else res.json('voucher hasn\'t deleted')
     })
 }
@@ -213,7 +215,8 @@ const updatevoucher = async (req, res, next) => {
                         else return console.log('Voucher code hasn\'t update')
                     })
                 }
-                next()
+                res.json('voucher updated success')
+
             }
             
         }

@@ -7,7 +7,8 @@ const all = async (req, res, next) => {
         .then((result) => {
             if (result.length > 0)
                 return res.json(result)
-            next()
+            return res.json('There is no product attributes')
+
         }).catch((err) => console.log(err))
 }
 
@@ -26,7 +27,7 @@ const addproductattributes = async (req, res, next) => {
             }
         }
     ).catch((err) => console.log(err))
-        .then(async(result2) => {
+        .then(async (result2) => {
             if (result2.length == 0)
                 return res.json('Product not found')
             else {
@@ -51,7 +52,8 @@ const addproductattributes = async (req, res, next) => {
                                 }
                             ).catch((err) => console.log(err))
                                 .then((result) => {
-                                    if (result) next()
+                                    if (result)
+                                        res.json('product attributes added success')
                                     else
                                         return res.json('product attribites hasn\'t added')
                                 })
@@ -62,18 +64,20 @@ const addproductattributes = async (req, res, next) => {
 }
 
 // Dont need to edit
-const deleteproductattributes = async (req, res, next) => {
+const deleteproductattributes = async (req, res) => {
     // Joi check
     const { error } = productattributesValidation.deleteSchema(req.body)
     if (error) return console.log(error)
 
-    const destroy = await productattributes.destroy({
+    await productattributes.destroy({
         where: {
             productId: req.body.productId
         }
     }).catch((err) => console.log(err))
-    if (destroy < 1) return res.json('Product Id in order no found')
-    else next()
+    .then((result) => {
+        if (!result) return res.json('Product Id in order no found')
+        else res.json('product attributes deleted')
+    })   
 }
 
 const updateproductattributes = async (req, res, next) => {
@@ -106,7 +110,7 @@ const updateproductattributes = async (req, res, next) => {
                         }
                     ).catch((err) => console.log(err))
                         .then((result) => {
-                            if (result) next()
+                            if (result) res.json('product attributes updated success')
                             else return res.json('product attribute hasn\'t update')
                         })
                 }
@@ -139,7 +143,7 @@ const updateproductattributes = async (req, res, next) => {
                         }
                     ).catch((err) => console.log(err))
                         .then((result) => {
-                            if (result) next()
+                            if (result) res.json('product attributes updated success')
                             else return res.json('product attribute hasn\'t update')
                         })
                 }

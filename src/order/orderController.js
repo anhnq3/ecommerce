@@ -1,25 +1,27 @@
+const orderServices = require('./orderServices')
+
 const All = (req, res) => {
-    res.json('There is no order')
+    orderServices.all(req, res)
 }
 
 const Deleteorder = (req, res) => {
-    res.json('order deleted')
+    orderServices.deleteorder(req, res)
 }
 
 const Addorder = (req, res) => {
-    res.json('order added success')
+    orderServices.addorder(req, res)
 }
 
 const Updateorder = (req, res) => {
-    res.json('order updated success')
+    orderServices.updateorder(req, res)
 }
 
 const Addvoucher = (req, res) => {
-    res.json('voucher deleted')
+    orderServices.addvoucher(req, res)
 }
 
 const Deletevoucher = (req, res) => {
-    res.json('voucher deleted')
+    orderServices.deletevoucher(req, res)
 }
 
 module.exports = {

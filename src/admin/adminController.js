@@ -1,30 +1,32 @@
+const adminServices = require('./adminServices')
+
 const getLogin = (req, res) => {
-    res.json('This is admin login template')
+    adminServices.login(req, res)
     // res.render('adminlogin')
 }
 
 const Login = async (req, res) => {
-    res.json('Password incorrect')   
+    adminServices.login(req, res)
 }
 
 const Logout = async (req, res) => {
-    res.json('Logout complete')
+    adminServices.logout(req, res)
 }
 
 const Passchange = async (req, res) => {
-    res.json('Your password has been changed')
+    adminServices.passchange(req, res)
 }
 
 const Roleset = async (req, res) => {
-    res.json ('Set role complete')
+    adminServices.roleset(req, res)
 }
 
 const Addadmin = async (req, res) => {
-    res.json('Adding admin successful')
+    adminServices.addadmin(req, res)
 }
 
 const Deleteadmin = async(req, res) => {
-    res.json('Delelte successful')
+    adminServices.deleteadmin(req, res)
 }
 
 module.exports = {

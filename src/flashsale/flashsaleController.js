@@ -1,17 +1,19 @@
+const flashsaleServices = require('./flashsaleServices')
+
 const All = (req, res) => {
-    res.json('There is no flashsale')
+    flashsaleServices.all(req, res)
 }
 
 const Deleteflashsale = (req, res) => {
-    res.json('flashsale deleted')
+    flashsaleServices.deleteflashsale(req, res)
 }
 
 const Addflashsale = (req, res) => {
-    res.json('flashsale added success')
+    flashsaleServices.addflashsale(req, res)
 }
 
 const Updateflashsale = (req, res) => {
-    res.json('flashsale updated success')
+    flashsaleServices.updateflashsale(req, res)
 }
 
 module.exports = {

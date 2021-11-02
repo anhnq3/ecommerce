@@ -1,17 +1,19 @@
+const voucherServices = require('./voucherServices')
+
 const All = (req, res) => {
-    res.json('There is no voucher')
+    voucherServices.all(req, res)
 }
 
 const Deletevoucher = (req, res) => {
-    res.json('voucher deleted')
+    voucherServices.deletevoucher(req, res)
 }
 
 const Addvoucher = (req, res) => {
-    res.json('voucher added success')
+    voucherServices.addvoucher(req, res)
 }
 
 const Updatevoucher = (req, res) => {
-    res.json('voucher updated success')
+    voucherServices.updatevoucher(req, res)
 }
 
 module.exports = {

@@ -1,13 +1,13 @@
 const { ordermain, order, flashsale } = require('../models')
 const ordermainValidation = require('./ordermainValidate')
 
-const all = async (req, res, next) => {
+const all = async (req, res) => {
     await ordermain.findAll()
         .catch((err) => console.log(err))
         .then((result) => {
             if (result)
                 return res.json(result)
-            else next()
+            else res.json('There is no ordermain')
         })
 }
 
@@ -60,7 +60,7 @@ const addordermain = async (req, res, next) => {
                         })
                     }
                     else {
-                        next()
+                        res.json('There is no flash sale code like that')
                     }
                 })
                 .catch((err) => console.log(err))
@@ -100,10 +100,10 @@ const addordermain = async (req, res, next) => {
                             }
                             console.log('Total your order is: ', bill)
                         })
-                        next()
+                        return res.json('you have been logged out')
                     }
                     else {
-                        res.json('There is no flash sale code like that')
+                        return res.json('There is no flash sale code like that')
                     }
                 })
                 .catch((err) => console.log(err))
@@ -113,7 +113,7 @@ const addordermain = async (req, res, next) => {
     }
 
     else {
-        res.json('You are not login yet')
+        return res.json('You are not login yet')
     }
 
 }
